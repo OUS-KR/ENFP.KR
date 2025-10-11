@@ -68,5 +68,117 @@
         "description": "미루는 습관을 이기는 법"
       }
     ]
+  },
+  {
+    "mainTitle": "테스트",
+    "items": [
+      {
+        "title": "ENFP 아이디어 발산 테스트",
+        "url": "/u/tests/test-idea-generation/",
+        "type": "테스트",
+        "description": "ENFP의 풍부한 상상력, 창의력, 그리고 새로운 아이디어를 끊임없이 생성하는 능력을 측정합니다."
+      },
+      {
+        "title": "ENFP 연애 스타일 테스트",
+        "url": "/u/tests/test-relationship-style/",
+        "type": "테스트",
+        "description": "ENFP의 연애 스타일 알아보기"
+      },
+      {
+        "title": "ENFP 스트레스 원인 테스트",
+        "url": "/u/tests/test-stress-triggers/",
+        "type": "테스트",
+        "description": "스트레스 원인 진단 테스트"
+      },
+      {
+        "title": "ENFP 사회적 에너지 테스트",
+        "url": "/u/tests/test-social-energy/",
+        "type": "테스트",
+        "description": "ENFP의 사교성, 친화력, 그리고 타인과의 상호작용을 통해 에너지를 얻는 성향을 측정합니다."
+      },
+      {
+        "title": "ENFP 빙고 챌린지",
+        "url": "/u/tests/test-bingo/",
+        "type": "테스트",
+        "description": "ENFP 특징으로 구성된 빙고 게임"
+      },
+      {
+        "title": "ENFP 가치관 탐색 테스트",
+        "url": "/u/tests/test-value-exploration/",
+        "type": "테스트",
+        "description": "ENFP의 개인적인 가치와 신념, 그리고 진정성을 추구하는 내면의 동기를 측정합니다."
+      },
+      {
+        "title": "ENFP 즉흥성 테스트",
+        "url": "/u/tests/test-spontaneity/",
+        "type": "테스트",
+        "description": "ENFP의 즉흥적인 성향과 새로운 상황에 대한 유연한 대처 능력을 측정합니다."
+      }
+    ]
+  },
+  {
+    "mainTitle": "게임",
+    "items": [
+      {
+        "title": "스토리 창작",
+        "url": "/u/tests/game-story-creator/",
+        "type": "게임",
+        "description": "다양한 장르와 키워드를 조합하여 자신만의 독창적인 스토리를 완성하는 게임입니다."
+      },
+      {
+        "title": "소셜 커넥션 시뮬레이션",
+        "url": "/u/tests/game-social-connection/",
+        "type": "게임",
+        "description": "가상의 커뮤니티에서 다양한 캐릭터들과 관계를 맺고, 사회적 네트워크를 확장해나가는 시뮬레이션 게임입니다."
+      },
+      {
+        "title": "탐험 어드벤처",
+        "url": "/u/tests/game-exploration-adventure/",
+        "type": "게임",
+        "description": "정해진 경로 없이 미지의 세계를 자유롭게 탐험하며 숨겨진 비밀을 발견하는 어드벤처 게임입니다."
+      },
+      {
+        "title": "커뮤니티 건설",
+        "url": "/u/tests/game-community-builder/",
+        "type": "게임",
+        "description": "이타심을 발휘하여 주민들의 행복을 최우선으로 하는 이상적인 커뮤니티를 건설하는 게임입니다."
+      },
+      {
+        "title": "아이디어 생성기",
+        "url": "/u/tests/game-idea-generator/",
+        "type": "게임",
+        "description": "복잡한 문제에 대해 브레인스토밍을 통해 혁신적인 해결책을 제안하는 게임입니다."
+      },
+      {
+        "title": "캠페인 매니저",
+        "url": "/u/tests/game-campaign-manager/",
+        "type": "게임",
+        "description": "사회적 가치를 위한 캠페인을 기획하고, 사람들의 마음을 움직여 지지를 얻어내는 전략 시뮬레이션 게임입니다."
+      },
+      {
+        "title": "발명 워크숍",
+        "url": "/u/tests/game-invention-workshop/",
+        "type": "게임",
+        "description": "주어진 재료와 문제를 조합하여 기발하고 창의적인 발명품을 만드는 퍼즐 게임입니다."
+      },
+      {
+        "title": "여행 블로거 시뮬레이션",
+        "url": "/u/tests/game-travel-blogger-sim/",
+        "type": "게임",
+        "description": "세계를 여행하며 새로운 경험을 하고, 이를 바탕으로 매력적인 콘텐츠를 만들어 팬들과 소통하는 시뮬레이션 게임입니다."
+      },
+      {
+        "title": "음악 기억력 게임",
+        "url": "/u/tests/game-music-memory/",
+        "type": "게임",
+        "description": "음악 기억력 게임"
+      },
+      {
+        "title": "리듬 마스터 게임",
+        "url": "/u/tests/game-rhythm-master/",
+        "type": "게임",
+        "description": "리듬 마스터 게임"
+      }
+    ]
   }
 ]
