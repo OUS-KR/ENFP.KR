@@ -15,5 +15,16 @@
         "description": "오늘의 추천 게임"
       }
     ]
+  },
+  {
+    "mainTitle": "정보",
+    "items": [
+      {
+        "title": "ENFP 특징 분석: 재기발랄한 활동가",
+        "url": "/u/tests/info-characteristics/",
+        "type": "정보",
+        "description": "ENFP의 핵심 특징, 장단점, 성장 방법"
+      }
+    ]
   }
 ]
