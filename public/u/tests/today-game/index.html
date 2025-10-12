@@ -168,6 +168,84 @@
 
     // --- Game Implementations for ENFP ---
 
+    // Game 0: Today's Idea Connection
+    function setupIdeaConnectionGame() {
+        document.getElementById('gameTitle').innerText = "오늘의 게임: 아이디어 연결";
+        const gameArea = document.getElementById('gameArea');
+        const connections = [
+            { words: ["구름", "음악", "자유"], q: "이 세 단어 사이의 가장 창의적인 연결고리는?", a: ["구름 위에서 자유롭게 음악을 연주하는 상상.", "구름처럼 형태 없는 음악을 자유롭게 듣는다.", "자유로운 영혼이 구름처럼 음악을 따라간다."], correct: 0 },
+            { words: ["바다", "꿈", "탐험"], q: "이 세 단어 사이의 가장 창의적인 연결고리는?", a: ["미지의 바다를 탐험하며 꿈을 찾아 떠난다.", "바다처럼 넓은 꿈을 꾸며 탐험한다.", "탐험가의 꿈은 바다처럼 깊다."], correct: 0 },
+            { words: ["별", "이야기", "영감"], q: "이 세 단어 사이의 가장 창의적인 연결고리는?", a: ["밤하늘의 별을 보며 새로운 이야기의 영감을 얻는다.", "별처럼 반짝이는 이야기에서 영감을 얻는다.", "영감은 별처럼 멀리 있지만 이야기로 다가온다."], correct: 0 }
+        ];
+        const connection = connections[Math.floor(currentRandFn() * connections.length)];
+        currentCorrectAnswer = connection.correct;
+        gameArea.innerHTML = `
+            <div class="game-display question">'${connection.words[0]}', '${connection.words[1]}', '${connection.words[2]}'.<br>${connection.q}</div>
+            <div class="choices">
+                ${connection.a.map((choice, index) => `<button class="choice-btn" data-index="${index}">${choice}</button>`).join('')}
+            </div>
+        `;
+        document.getElementById('game-input-area').innerHTML = '';
+        gameInProgress = true;
+    }
+
+    // --- Game Dispatcher and Common Logic ---
+    const gameTypes = [
+        setupIdeaConnectionGame
+    ];
+
+    function getDayOfWeekText(day) {
+        const messages = [
+            "일요일의 마무리, 당신의 내면을 들여다보는 시간을 가져보세요.", // Sunday
+            "새로운 한 주, 당신의 따뜻한 마음으로 세상을 밝혀주세요.", // Monday
+            "오늘은 당신의 깊은 공감 능력이 필요한 날입니다.", // Tuesday
+            "주 중반, 잠시 몽상에 빠져보는 건 어떨까요?", // Wednesday
+            "당신의 이상이 세상을 더 나은 곳으로 만듭니다.", // Thursday
+            "주말을 앞둔 금요일, 창의적인 영감을 떠올려 보세요.", // Friday
+            "여유로운 토요일, 아름다운 것들을 감상하며 하루를 보내세요.", // Saturday
+        ];
+        return messages[day];
+    }
+
+    function showFeedback(isCorrect, message) {
+        const feedbackMessage = document.getElementById('feedbackMessage');
+        if (isCorrect) {
+            feedbackMessage.innerText = message || "정답입니다! 역시 ENFP, 기발한 아이디어가 넘치는군요.";
+            feedbackMessage.className = "feedback-message correct";
+        } else {
+            feedbackMessage.innerText = message || "아쉽네요. 다른 가능성은 없었을까요?";
+            feedbackMessage.className = "feedback-message incorrect";
+        }
+        gameInProgress = false;
+    }
+
+    function handleChoiceClick(event) {
+        if (!gameInProgress) return;
+        const selectedIndex = parseInt(event.target.getAttribute('data-index'));
+        showFeedback(selectedIndex === currentCorrectAnswer);
+        document.querySelectorAll('.choice-btn').forEach(btn => btn.disabled = true);
+    }
+
+    function initDailyGame() {
+        const today = new Date();
+        const seed = getDailySeed();
+        currentRandFn = mulberry32(seed);
+        
+        const dayOfWeek = today.getDay();
+        document.getElementById('gameDescription').innerText = getDayOfWeekText(dayOfWeek);
+
+        const gameTypeIndex = Math.floor(currentRandFn() * gameTypes.length + dayOfWeek) % gameTypes.length;
+        gameTypes[gameTypeIndex]();
+
+        document.getElementById('feedbackMessage').innerText = '';
+        document.getElementById('feedbackMessage').className = "feedback-message";
+        
+        // Add event listeners after creating the elements
+        document.querySelectorAll('.choice-btn').forEach(btn => {
+            btn.addEventListener('click', handleChoiceClick);
+        });
+    }
+
     // Game 0: Idea Association
     function setupIdeaAssociationGame() {
         document.getElementById('gameTitle').innerText = "오늘의 게임: 아이디어 연상";
