@@ -455,6 +455,95 @@ const gameActions = {
         const result = chosenOutcome.effect(gameState);
         updateState(result.changes, result.message);
     },
+    gather_ideas: () => {
+        if (!spendActionPoint()) return;
+        const successChance = Math.min(0.95, 0.6 + (gameState.promoLevel * 0.1) + (gameState.dailyBonus.creationSuccess || 0));
+        let message = "";
+        if (currentRandFn() < successChance) {
+            const ideasGain = getRandomValue(5, 2);
+            message = `새로운 아이디어를 구상했습니다! (+${ideasGain} 아이디어)`;
+            updateState({ resources: { ...gameState.resources, ideas: gameState.resources.ideas + ideasGain } }, message);
+        } else {
+            message = "아이디어 구상에 실패했습니다.";
+            updateState({}, message);
+        }
+    },
+    gather_participants: () => {
+        if (!spendActionPoint()) return;
+        const successChance = Math.min(0.95, 0.6 + (gameState.promoLevel * 0.1) + (gameState.dailyBonus.creationSuccess || 0));
+        let message = "";
+        if (currentRandFn() < successChance) {
+            const participantsGain = getRandomValue(5, 2);
+            message = `새로운 참가자를 모집했습니다! (+${participantsGain} 참가자)`;
+            updateState({ resources: { ...gameState.resources, participants: gameState.resources.participants + participantsGain } }, message);
+        } else {
+            message = "참가자 모집에 실패했습니다.";
+            updateState({}, message);
+        }
+    },
+    gather_funds: () => {
+        if (!spendActionPoint()) return;
+        const successChance = Math.min(0.95, 0.6 + (gameState.promoLevel * 0.1) + (gameState.dailyBonus.creationSuccess || 0));
+        let message = "";
+        if (currentRandFn() < successChance) {
+            const fundsGain = getRandomValue(5, 2);
+            message = `후원금을 모금했습니다! (+${fundsGain} 자금)`;
+            updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds + fundsGain } }, message);
+        } else {
+            message = "후원금 모금에 실패했습니다.";
+            updateState({}, message);
+        }
+    },
+    build_foodTruck: () => {
+        if (!spendActionPoint()) return;
+        const cost = { ideas: 20, funds: 30 };
+        if (gameState.resources.ideas >= cost.ideas && gameState.resources.funds >= cost.funds) {
+            gameState.festivalBooths.foodTruck.built = true;
+            const passionGain = getRandomValue(10, 3);
+            updateState({ passion: gameState.passion + passionGain, resources: { ...gameState.resources, ideas: gameState.resources.ideas - cost.ideas, funds: gameState.resources.funds - cost.funds } }, `푸드 트럭을 설치했습니다! (+${passionGain} 열정)`);
+        } else {
+            updateState({}, "자원이 부족하여 설치할 수 없습니다.");
+        }
+    },
+    maintain_booth: (params) => {
+        if (!spendActionPoint()) return;
+        const boothKey = params.booth;
+        const cost = { funds: 10, participants: 5 };
+        if (gameState.resources.funds >= cost.funds && gameState.resources.participants >= cost.participants) {
+            gameState.festivalBooths[boothKey].durability = 100;
+            updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds - cost.funds, participants: gameState.resources.participants - cost.participants } }, `${gameState.festivalBooths[boothKey].name} 부스의 보수를 완료했습니다.`);
+        } else {
+            updateState({}, "보수에 필요한 자원이 부족합니다.");
+        }
+    },
+    play_street_performance: () => {
+        if (!spendActionPoint()) return;
+        const rand = currentRandFn();
+        let message = "";
+        if (rand < 0.2) {
+            const fundsGain = getRandomValue(20, 5);
+            message = `길거리 공연이 대박났습니다! 후원금이 쏟아집니다! (+${fundsGain} 자금)`;
+            updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds + fundsGain } }, message);
+        } else {
+            const recognitionGain = getRandomValue(5, 2);
+            message = `성공적인 길거리 공연이었습니다. (+${recognitionGain} 인지도)`;
+            updateState({ recognition: gameState.recognition + recognitionGain }, message);
+        }
+    },
+    explore_hidden_place: () => {
+        if (!spendActionPoint()) return;
+        const rand = currentRandFn();
+        let message = "";
+        if (rand < 0.2) {
+            const ticketGain = getRandomValue(2, 1);
+            message = `숨겨진 장소에서 특별 게스트 티켓을 발견했습니다! (+${ticketGain} 특별 티켓)`;
+            updateState({ resources: { ...gameState.resources, special_tickets: (gameState.resources.special_tickets || 0) + ticketGain } }, message);
+        } else {
+            const ideasGain = getRandomValue(10, 5);
+            message = `탐방 중 새로운 아이디어를 얻었습니다. (+${ideasGain} 아이디어)`;
+            updateState({ resources: { ...gameState.resources, ideas: gameState.resources.ideas + ideasGain } }, message);
+        }
+    },
     show_resource_gathering_options: () => updateState({ currentScenarioId: 'action_resource_gathering' }),
     show_booth_options: () => updateState({ currentScenarioId: 'action_booth_management' }),
     show_surprise_events_options: () => updateState({ currentScenarioId: 'surprise_events_menu' }),
@@ -473,11 +562,11 @@ const gameActions = {
 
 function applyStatEffects() {
     let message = "";
-    if (gameState.creativity >= 70) { message += "높은 창의력 덕분에 축제가 더욱 풍성해집니다. "; }
-    if (gameState.passion >= 70) { gameState.maxActionPoints += 1; message += "넘치는 열정으로 행동력이 증가합니다. "; }
-    if (gameState.relationships >= 70) { message += "끈끈한 관계 덕분에 아티스트들의 시너지가 증가합니다. "; }
-    if (gameState.energy < 30) { message += "에너지가 부족하여 부스들이 빠르게 노후화됩니다. "; }
-    if (gameState.recognition >= 70) { message += "높은 인지도 덕분에 후원금이 자동으로 모금됩니다. "; }
+    if (gameState.creativity >= 70) { gameState.dailyBonus.creationSuccess += 0.1; message += "높은 창의력 덕분에 자원 확보 성공률이 증가합니다. "; }
+    if (gameState.passion >= 70) { gameState.maxActionPoints += 1; gameState.actionPoints = gameState.maxActionPoints; message += "넘치는 열정으로 행동력이 증가합니다. "; }
+    if (gameState.relationships >= 70) { gameState.artists.forEach(a => a.synergy = Math.min(100, a.synergy + 5)); message += "끈끈한 관계 덕분에 아티스트들의 시너지가 증가합니다. "; }
+    if (gameState.energy < 30) { Object.keys(gameState.festivalBooths).forEach(key => { if(gameState.festivalBooths[key].built) gameState.festivalBooths[key].durability -= 2; }); message += "에너지가 부족하여 부스들이 빠르게 노후화됩니다. "; }
+    if (gameState.recognition >= 70) { gameState.resources.funds += getRandomValue(5, 2); message += "높은 인지도 덕분에 후원금이 자동으로 모금됩니다. "; }
     return message;
 }
 
