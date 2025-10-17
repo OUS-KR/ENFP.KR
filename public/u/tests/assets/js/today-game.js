@@ -87,18 +87,10 @@ function loadGameState() {
     if (savedState) {
         let loaded = JSON.parse(savedState);
         if (!loaded.dailyBonus) loaded.dailyBonus = { creationSuccess: 0 };
-        if (!loaded.artists || loaded.artists.length === 0) {
-            loaded.artists = [
-                { id: "leo", name: "레오", personality: "열정적인", skill: "음악", synergy: 70 },
-                { id: "bella", name: "벨라", personality: "자유로운 영혼", skill: "미술", synergy: 60 }
-            ];
-        }
         if (loaded.energy === undefined) loaded.energy = 50;
         if (loaded.recognition === undefined) loaded.recognition = 50;
-
         Object.assign(gameState, loaded);
         currentRandFn = mulberry32(getDailySeed() + gameState.day);
-
         if (gameState.lastPlayedDate !== today) {
             gameState.day += 1;
             gameState.lastPlayedDate = today;
@@ -154,7 +146,6 @@ function renderChoices(choices) {
     const choicesDiv = document.getElementById('gameChoices');
     if (!choicesDiv) return;
     let dynamicChoices = [];
-
     if (gameState.currentScenarioId === 'intro') {
         dynamicChoices = gameScenarios.intro.choices;
     } else if (gameState.currentScenarioId === 'action_booth_management') {
@@ -176,7 +167,6 @@ function renderChoices(choices) {
     } else {
         dynamicChoices = choices ? [...choices] : [];
     }
-
     choicesDiv.innerHTML = dynamicChoices.map(choice => `<button class="choice-btn" data-action="${choice.action}" data-params='${JSON.stringify(choice.params || {})}'>${choice.text}</button>`).join('');
     choicesDiv.querySelectorAll('.choice-btn').forEach(button => {
         button.addEventListener('click', () => {
@@ -192,11 +182,10 @@ function renderAll(customDisplayMessage = null) {
     const desc = document.getElementById('gameDescription');
     if (desc) desc.style.display = 'none';
     renderStats();
-    
     if (!gameState.currentScenarioId.startsWith('minigame_')) {
         const scenario = gameScenarios[gameState.currentScenarioId] || gameScenarios.intro;
         updateGameDisplay(customDisplayMessage || scenario.text);
-        renderChoices(scenario.choices);
+        renderChoices(scenario.choices || []);
     }
 }
 
@@ -238,101 +227,21 @@ const gameScenarios = {
 };
 
 const brainstormOutcomes = [
-    {
-        condition: (gs) => gs.resources.ideas < 20,
-        weight: 30,
-        effect: (gs) => {
-            const ideasGain = getRandomValue(10, 5);
-            return { changes: { resources: { ...gs.resources, ideas: gs.resources.ideas + ideasGain } }, message: `브레인스토밍 중 새로운 아이디어를 발견했습니다! (+${ideasGain} 아이디어)` };
-        }
-    },
-    {
-        condition: (gs) => true,
-        weight: 20,
-        effect: (gs) => {
-            const creativityGain = getRandomValue(5, 2);
-            const passionGain = getRandomValue(5, 2);
-            return { changes: { creativity: gs.creativity + creativityGain, passion: gs.passion + passionGain }, message: `자유로운 브레인스토밍으로 창의성과 열정이 샘솟습니다. (+${creativityGain} 창의성, +${passionGain} 열정)` };
-        }
-    },
-    {
-        condition: () => true,
-        weight: 25,
-        effect: (gs) => {
-            const actionLoss = getRandomValue(2, 1);
-            const energyLoss = getRandomValue(5, 2);
-            return { changes: { actionPoints: gs.actionPoints - actionLoss, energy: gs.energy - energyLoss }, message: `너무 많은 아이디어가 떠올라 혼란스럽습니다. 에너지가 소모되었습니다. (-${actionLoss} 행동력, -${energyLoss} 에너지)` };
-        }
-    }
+    { weight: 30, condition: () => true, effect: (gs) => { const v = getRandomValue(10, 5); return { changes: { resources: { ...gs.resources, ideas: gs.resources.ideas + v } }, message: `브레인스토밍 중 새로운 아이디어를 발견했습니다! (+${v} 아이디어)` }; } },
+    { weight: 25, condition: () => true, effect: (gs) => { const v = getRandomValue(5, 2); return { changes: { creativity: gs.creativity + v, passion: gs.passion + v }, message: `자유로운 브레인스토밍으로 창의성과 열정이 샘솟습니다. (+${v} 창의성, +${v} 열정)` }; } },
+    { weight: 20, condition: () => true, effect: (gs) => { const v = getRandomValue(5, 2); return { changes: { energy: gs.energy - v }, message: `너무 많은 아이디어가 떠올라 혼란스럽습니다. (-${v} 에너지)` }; } },
 ];
 
 const scoutOutcomes = [
-    {
-        condition: (gs, artist) => artist.synergy < 60,
-        weight: 40,
-        effect: (gs, artist) => {
-            const synergyGain = getRandomValue(10, 5);
-            const relationshipsGain = getRandomValue(5, 2);
-            const updatedArtists = gs.artists.map(a => a.id === artist.id ? { ...a, synergy: Math.min(100, a.synergy + synergyGain) } : a);
-            return { changes: { artists: updatedArtists, relationships: gs.relationships + relationshipsGain }, message: `${artist.name}${getWaGwaParticle(artist.name)} 깊은 대화를 나누며 시너지를 얻었습니다. (+${synergyGain} ${artist.name} 시너지, +${relationshipsGain} 관계)` };
-        }
-    },
-    {
-        condition: (gs, artist) => artist.personality === "열정적인",
-        weight: 20,
-        effect: (gs, artist) => {
-            const passionGain = getRandomValue(10, 3);
-            const recognitionGain = getRandomValue(5, 2);
-            return { changes: { passion: gs.passion + passionGain, recognition: gs.recognition + recognitionGain }, message: `${artist.name}${getWaGwaParticle(artist.name)} 열정적인 대화를 나누며 당신의 열정과 인지도가 상승했습니다. (+${passionGain} 열정, +${recognitionGain} 인지도)` };
-        }
-    },
-    {
-        condition: (gs) => true,
-        weight: 25,
-        effect: (gs, artist) => {
-            const relationshipsGain = getRandomValue(5, 2);
-            return { changes: { relationships: gs.relationships + relationshipsGain }, message: `${artist.name}${getWaGwaParticle(artist.name)} 소소한 이야기를 나누며 관계가 조금 더 단단해졌습니다. (+${relationshipsGain} 관계)` };
-        }
-    },
-    {
-        condition: (gs, artist) => gs.relationships < 40 || artist.synergy < 40,
-        weight: 20,
-        effect: (gs, artist) => {
-            const synergyLoss = getRandomValue(10, 3);
-            const passionLoss = getRandomValue(5, 2);
-            const updatedArtists = gs.artists.map(a => a.id === artist.id ? { ...a, synergy: Math.max(0, a.synergy - synergyLoss) } : a);
-            return { changes: { artists: updatedArtists, passion: gs.passion - passionLoss }, message: `${artist.name}${getWaGwaParticle(artist.name)} 대화 중 의견 차이로 감정이 상했습니다. (-${synergyLoss} ${artist.name} 시너지, -${passionLoss} 열정)` };
-        }
-    }
+    { weight: 40, condition: (gs, artist) => artist.synergy < 80, effect: (gs, artist) => { const v = getRandomValue(10, 5); const updated = gs.artists.map(a => a.id === artist.id ? { ...a, synergy: Math.min(100, a.synergy + v) } : a); return { changes: { artists: updated, relationships: gs.relationships + 5 }, message: `${artist.name}와(과) 깊은 대화를 나누며 시너지를 얻었습니다. (+${v} ${artist.name} 시너지, +5 관계)` }; } },
+    { weight: 30, condition: () => true, effect: (gs, artist) => { const v = getRandomValue(5, 2); return { changes: { passion: gs.passion + v, recognition: gs.recognition + v }, message: `${artist.name}의 열정에 감화되어 당신의 열정과 인지도가 상승했습니다. (+${v} 열정, +${v} 인지도)` }; } },
+    { weight: 20, condition: (gs, artist) => gs.relationships < 40, effect: (gs, artist) => { const v = getRandomValue(10, 3); const updated = gs.artists.map(a => a.id === artist.id ? { ...a, synergy: Math.max(0, a.synergy - v) } : a); return { changes: { artists: updated }, message: `대화 중 의견 차이로 ${artist.name}와의 관계가 소원해졌습니다. (-${v} ${artist.name} 시너지)` }; } },
 ];
 
 const promoOutcomes = [
-    {
-        condition: (gs) => gs.passion < 40,
-        weight: 40,
-        effect: (gs) => {
-            const recognitionLoss = getRandomValue(10, 4);
-            const relationshipsLoss = getRandomValue(5, 2);
-            return { changes: { recognition: gs.recognition - recognitionLoss, relationships: gs.relationships - relationshipsLoss }, message: `홍보 활동에 대한 반응이 차갑습니다. 당신의 열정이 부족해 보입니다. (-${recognitionLoss} 인지도, -${relationshipsLoss} 관계)` };
-        }
-    },
-    {
-        condition: (gs) => gs.creativity > 70 && gs.relationships > 60,
-        weight: 30,
-        effect: (gs) => {
-            const recognitionGain = getRandomValue(15, 5);
-            const participantsGain = getRandomValue(10, 3);
-            return { changes: { recognition: gs.recognition + recognitionGain, resources: { ...gs.resources, participants: gs.resources.participants + participantsGain } }, message: `창의적인 홍보 활동이 입소문을 탔습니다! (+${recognitionGain} 인지도, +${participantsGain} 참가자)` };
-        }
-    },
-    {
-        condition: () => true,
-        weight: 20,
-        effect: (gs) => {
-            const recognitionGain = getRandomValue(5, 2);
-            return { changes: { recognition: gs.recognition + recognitionGain }, message: `평범한 홍보 활동이었지만, 축제의 인지도가 약간 상승했습니다. (+${recognitionGain} 인지도)` };
-        }
-    }
+    { weight: 40, condition: (gs) => gs.creativity > 60, effect: (gs) => { const v = getRandomValue(15, 5); return { changes: { recognition: gs.recognition + v, resources: { ...gs.resources, participants: gs.resources.participants + v } }, message: `창의적인 홍보 활동이 입소문을 탔습니다! (+${v} 인지도, +${v} 참가자)` }; } },
+    { weight: 30, condition: () => true, effect: (gs) => { const v = getRandomValue(5, 2); return { changes: { recognition: gs.recognition + v }, message: `평범한 홍보 활동이었지만, 축제의 인지도가 약간 상승했습니다. (+${v} 인지도)` }; } },
+    { weight: 20, condition: (gs) => gs.passion < 40, effect: (gs) => { const v = getRandomValue(10, 4); return { changes: { recognition: gs.recognition - v }, message: `열정 없는 홍보 활동에 대한 반응이 차갑습니다. (-${v} 인지도)` }; } },
 ];
 
 const minigames = [
@@ -341,43 +250,24 @@ const minigames = [
         description: "화면에 나타나는 단어들을 빠르게 입력하여 새로운 아이디어를 스케치하세요!",
         start: (gameArea, choicesDiv) => {
             const words = ["열정", "축제", "창의력", "사람들", "음악", "예술", "자유", "영감", "소통", "에너지"];
-            gameState.minigameState = {
-                wordsToType: [...Array(5)].map(() => words[Math.floor(currentRandFn() * words.length)]),
-                typedWords: 0,
-                startTime: Date.now(),
-                score: 0,
-            };
+            gameState.minigameState = { wordsToType: [...Array(5)].map(() => words[Math.floor(currentRandFn() * words.length)]), typedWords: 0, startTime: Date.now(), score: 0 };
             minigames[0].render(gameArea, choicesDiv);
         },
         render: (gameArea, choicesDiv) => {
             const state = gameState.minigameState;
             if (state.typedWords >= state.wordsToType.length) return;
-            gameArea.innerHTML = `
-                <p><b>진행:</b> ${state.typedWords} / ${state.wordsToType.length}</p>
-                <p>아래 단어를 입력하고 Enter를 누르세요:</p>
-                <h2 id="minigameWord" style="font-size: 2.5em; color: var(--primary-color);">${state.wordsToType[state.typedWords]}</h2>
-                <input type="text" id="minigameInput" style="font-size: 1.5em; padding: 10px; width: 80%; margin-top: 10px;" autocomplete="off">
-            `;
+            gameArea.innerHTML = `<p><b>진행:</b> ${state.typedWords} / ${state.wordsToType.length}</p><p>아래 단어를 입력하고 Enter를 누르세요:</p><h2 id="minigameWord" style="font-size: 2.5em; color: var(--primary-color);">${state.wordsToType[state.typedWords]}</h2><input type="text" id="minigameInput" style="font-size: 1.5em; padding: 10px; width: 80%; margin-top: 10px;" autocomplete="off">`;
             choicesDiv.innerHTML = '';
             const input = document.getElementById('minigameInput');
             input.focus();
-            input.addEventListener('keyup', (e) => {
-                if (e.key === 'Enter') {
-                    minigames[0].processAction('submitWord', e.target.value);
-                }
-            });
+            input.addEventListener('keyup', (e) => { if (e.key === 'Enter') { minigames[0].processAction('submitWord', e.target.value); } });
         },
         processAction: (actionType, value) => {
             if (actionType === 'submitWord') {
                 const state = gameState.minigameState;
-                const correctWord = state.wordsToType[state.typedWords];
-                if (value.trim().toLowerCase() === correctWord.toLowerCase()) {
+                if (value.trim().toLowerCase() === state.wordsToType[state.typedWords].toLowerCase()) {
                     state.typedWords++;
-                    if (state.typedWords >= state.wordsToType.length) {
-                        minigames[0].end();
-                    } else {
-                        minigames[0].render(document.getElementById('gameArea'), document.getElementById('gameChoices'));
-                    }
+                    if (state.typedWords >= state.wordsToType.length) { minigames[0].end(); } else { minigames[0].render(document.getElementById('gameArea'), document.getElementById('gameChoices')); }
                 }
             }
         },
@@ -386,38 +276,21 @@ const minigames = [
             const timeTaken = (Date.now() - state.startTime) / 1000;
             state.score = Math.max(0, 60 - Math.floor(timeTaken)) * 10;
             const rewards = calculateMinigameReward(minigames[0].name, state.score);
-            updateState({
-                creativity: gameState.creativity + rewards.creativity,
-                passion: gameState.passion + rewards.passion,
-                currentScenarioId: 'intro'
-            }, rewards.message);
-            gameState.minigameState = {};
+            updateState({ creativity: gameState.creativity + rewards.creativity, passion: gameState.passion + rewards.passion, currentScenarioId: 'intro' }, rewards.message);
         }
     },
 ];
 
 function calculateMinigameReward(minigameName, score) {
     let rewards = { creativity: 0, passion: 0, message: "" };
-    if (score > 400) {
-        rewards.creativity = 15;
-        rewards.passion = 10;
-        rewards.message = `엄청난 속도! 창의적인 아이디어가 샘솟습니다! (+15 창의성, +10 열정)`;
-    } else if (score > 200) {
-        rewards.creativity = 10;
-        rewards.passion = 5;
-        rewards.message = `훌륭해요! 좋은 아이디어가 떠올랐습니다. (+10 창의성, +5 열정)`;
-    } else {
-        rewards.creativity = 5;
-        rewards.message = `아이디어 스케치를 완료했습니다. (+5 창의성)`;
-    }
+    if (score > 400) { rewards.creativity = 15; rewards.passion = 10; rewards.message = `엄청난 속도! 창의적인 아이디어가 샘솟습니다! (+15 창의성, +10 열정)`; }
+    else if (score > 200) { rewards.creativity = 10; rewards.passion = 5; rewards.message = `훌륭해요! 좋은 아이디어가 떠올랐습니다. (+10 창의성, +5 열정)`; }
+    else { rewards.creativity = 5; rewards.message = `아이디어 스케치를 완료했습니다. (+5 창의성)`; }
     return rewards;
 }
 
 function spendActionPoint() {
-    if (gameState.actionPoints <= 0) {
-        updateGameDisplay("행동력이 부족합니다.");
-        return false;
-    }
+    if (gameState.actionPoints <= 0) { updateGameDisplay("행동력이 부족합니다."); return false; }
     updateState({ actionPoints: gameState.actionPoints - 1 });
     return true;
 }
@@ -425,7 +298,7 @@ function spendActionPoint() {
 const gameActions = {
     brainstorm: () => {
         if (!spendActionPoint()) return;
-        const possibleOutcomes = brainstormOutcomes.filter(o => o.condition(gameState));
+        const possibleOutcomes = brainstormOutcomes.filter(o => !o.condition || o.condition(gameState));
         const totalWeight = possibleOutcomes.reduce((sum, o) => sum + o.weight, 0);
         const rand = currentRandFn() * totalWeight;
         let cumulativeWeight = 0;
@@ -437,7 +310,7 @@ const gameActions = {
         if (!spendActionPoint()) return;
         const artist = gameState.artists[Math.floor(currentRandFn() * gameState.artists.length)];
         if (gameState.dailyActions.scouted.includes(artist.id)) { updateState({}, `${artist.name}${getWaGwaParticle(artist.name)} 이미 충분히 교류했습니다.`); return; }
-        const possibleOutcomes = scoutOutcomes.filter(o => o.condition(gameState, artist));
+        const possibleOutcomes = scoutOutcomes.filter(o => !o.condition || o.condition(gameState, artist));
         const totalWeight = possibleOutcomes.reduce((sum, o) => sum + o.weight, 0);
         const rand = currentRandFn() * totalWeight;
         let cumulativeWeight = 0;
@@ -447,7 +320,7 @@ const gameActions = {
     },
     promo_activities: () => {
         if (!spendActionPoint()) return;
-        const possibleOutcomes = promoOutcomes.filter(o => o.condition(gameState));
+        const possibleOutcomes = promoOutcomes.filter(o => !o.condition || o.condition(gameState));
         const totalWeight = possibleOutcomes.reduce((sum, o) => sum + o.weight, 0);
         const rand = currentRandFn() * totalWeight;
         let cumulativeWeight = 0;
@@ -458,52 +331,71 @@ const gameActions = {
     gather_ideas: () => {
         if (!spendActionPoint()) return;
         const successChance = Math.min(0.95, 0.6 + (gameState.promoLevel * 0.1) + (gameState.dailyBonus.creationSuccess || 0));
-        let message = "";
         if (currentRandFn() < successChance) {
-            const ideasGain = getRandomValue(5, 2);
-            message = `새로운 아이디어를 구상했습니다! (+${ideasGain} 아이디어)`;
-            updateState({ resources: { ...gameState.resources, ideas: gameState.resources.ideas + ideasGain } }, message);
-        } else {
-            message = "아이디어 구상에 실패했습니다.";
-            updateState({}, message);
-        }
+            const v = getRandomValue(5, 2);
+            updateState({ resources: { ...gameState.resources, ideas: gameState.resources.ideas + v } }, `새로운 아이디어를 구상했습니다! (+${v} 아이디어)`);
+        } else { updateState({}, "아이디어 구상에 실패했습니다."); }
     },
     gather_participants: () => {
         if (!spendActionPoint()) return;
         const successChance = Math.min(0.95, 0.6 + (gameState.promoLevel * 0.1) + (gameState.dailyBonus.creationSuccess || 0));
-        let message = "";
         if (currentRandFn() < successChance) {
-            const participantsGain = getRandomValue(5, 2);
-            message = `새로운 참가자를 모집했습니다! (+${participantsGain} 참가자)`;
-            updateState({ resources: { ...gameState.resources, participants: gameState.resources.participants + participantsGain } }, message);
-        } else {
-            message = "참가자 모집에 실패했습니다.";
-            updateState({}, message);
-        }
+            const v = getRandomValue(5, 2);
+            updateState({ resources: { ...gameState.resources, participants: gameState.resources.participants + v } }, `새로운 참가자를 모집했습니다! (+${v} 참가자)`);
+        } else { updateState({}, "참가자 모집에 실패했습니다."); }
     },
     gather_funds: () => {
         if (!spendActionPoint()) return;
         const successChance = Math.min(0.95, 0.6 + (gameState.promoLevel * 0.1) + (gameState.dailyBonus.creationSuccess || 0));
-        let message = "";
         if (currentRandFn() < successChance) {
-            const fundsGain = getRandomValue(5, 2);
-            message = `후원금을 모금했습니다! (+${fundsGain} 자금)`;
-            updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds + fundsGain } }, message);
-        } else {
-            message = "후원금 모금에 실패했습니다.";
-            updateState({}, message);
-        }
+            const v = getRandomValue(5, 2);
+            updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds + v } }, `후원금을 모금했습니다! (+${v} 자금)`);
+        } else { updateState({}, "후원금 모금에 실패했습니다."); }
     },
     build_foodTruck: () => {
         if (!spendActionPoint()) return;
         const cost = { ideas: 20, funds: 30 };
         if (gameState.resources.ideas >= cost.ideas && gameState.resources.funds >= cost.funds) {
             gameState.festivalBooths.foodTruck.built = true;
-            const passionGain = getRandomValue(10, 3);
-            updateState({ passion: gameState.passion + passionGain, resources: { ...gameState.resources, ideas: gameState.resources.ideas - cost.ideas, funds: gameState.resources.funds - cost.funds } }, `푸드 트럭을 설치했습니다! (+${passionGain} 열정)`);
-        } else {
-            updateState({}, "자원이 부족하여 설치할 수 없습니다.");
-        }
+            const v = getRandomValue(10, 3);
+            updateState({ passion: gameState.passion + v, resources: { ...gameState.resources, ideas: gameState.resources.ideas - cost.ideas, funds: gameState.resources.funds - cost.funds } }, `푸드 트럭을 설치했습니다! (+${v} 열정)`);
+        } else { updateState({}, "자원이 부족합니다."); }
+    },
+    build_craftBooth: () => {
+        if (!spendActionPoint()) return;
+        const cost = { ideas: 30, participants: 10 };
+        if (gameState.resources.ideas >= cost.ideas && gameState.resources.participants >= cost.participants) {
+            gameState.festivalBooths.craftBooth.built = true;
+            const v = getRandomValue(10, 3);
+            updateState({ creativity: gameState.creativity + v, resources: { ...gameState.resources, ideas: gameState.resources.ideas - cost.ideas, participants: gameState.resources.participants - cost.participants } }, `공예 부스를 설치했습니다! (+${v} 창의성)`);
+        } else { updateState({}, "자원이 부족합니다."); }
+    },
+    build_mainStage: () => {
+        if (!spendActionPoint()) return;
+        const cost = { ideas: 50, funds: 100 };
+        if (gameState.resources.ideas >= cost.ideas && gameState.resources.funds >= cost.funds) {
+            gameState.festivalBooths.mainStage.built = true;
+            const v = getRandomValue(15, 5);
+            updateState({ recognition: gameState.recognition + v, resources: { ...gameState.resources, ideas: gameState.resources.ideas - cost.ideas, funds: gameState.resources.funds - cost.funds } }, `중앙 무대를 건설했습니다! (+${v} 인지도)`);
+        } else { updateState({}, "자원이 부족합니다."); }
+    },
+    build_ideaLounge: () => {
+        if (!spendActionPoint()) return;
+        const cost = { ideas: 80, participants: 30 };
+        if (gameState.resources.ideas >= cost.ideas && gameState.resources.participants >= cost.participants) {
+            gameState.festivalBooths.ideaLounge.built = true;
+            const v = getRandomValue(15, 5);
+            updateState({ relationships: gameState.relationships + v, resources: { ...gameState.resources, ideas: gameState.resources.ideas - cost.ideas, participants: gameState.resources.participants - cost.participants } }, `아이디어 라운지를 건설했습니다! (+${v} 관계)`);
+        } else { updateState({}, "자원이 부족합니다."); }
+    },
+    build_mediaStudio: () => {
+        if (!spendActionPoint()) return;
+        const cost = { funds: 100, ideas: 50 };
+        if (gameState.resources.funds >= cost.funds && gameState.resources.ideas >= cost.ideas) {
+            gameState.festivalBooths.mediaStudio.built = true;
+            const v = getRandomValue(20, 5);
+            updateState({ recognition: gameState.recognition + v, resources: { ...gameState.resources, funds: gameState.resources.funds - cost.funds, ideas: gameState.resources.ideas - cost.ideas } }, `미디어 스튜디오를 건설했습니다! (+${v} 인지도)`);
+        } else { updateState({}, "자원이 부족합니다."); }
     },
     maintain_booth: (params) => {
         if (!spendActionPoint()) return;
@@ -512,36 +404,28 @@ const gameActions = {
         if (gameState.resources.funds >= cost.funds && gameState.resources.participants >= cost.participants) {
             gameState.festivalBooths[boothKey].durability = 100;
             updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds - cost.funds, participants: gameState.resources.participants - cost.participants } }, `${gameState.festivalBooths[boothKey].name} 부스의 보수를 완료했습니다.`);
-        } else {
-            updateState({}, "보수에 필요한 자원이 부족합니다.");
-        }
+        } else { updateState({}, "보수에 필요한 자원이 부족합니다."); }
     },
     play_street_performance: () => {
         if (!spendActionPoint()) return;
         const rand = currentRandFn();
-        let message = "";
         if (rand < 0.2) {
-            const fundsGain = getRandomValue(20, 5);
-            message = `길거리 공연이 대박났습니다! 후원금이 쏟아집니다! (+${fundsGain} 자금)`;
-            updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds + fundsGain } }, message);
+            const v = getRandomValue(20, 5);
+            updateState({ resources: { ...gameState.resources, funds: gameState.resources.funds + v } }, `길거리 공연이 대박났습니다! (+${v} 자금)`);
         } else {
-            const recognitionGain = getRandomValue(5, 2);
-            message = `성공적인 길거리 공연이었습니다. (+${recognitionGain} 인지도)`;
-            updateState({ recognition: gameState.recognition + recognitionGain }, message);
+            const v = getRandomValue(5, 2);
+            updateState({ recognition: gameState.recognition + v }, `성공적인 길거리 공연이었습니다. (+${v} 인지도)`);
         }
     },
     explore_hidden_place: () => {
         if (!spendActionPoint()) return;
         const rand = currentRandFn();
-        let message = "";
         if (rand < 0.2) {
-            const ticketGain = getRandomValue(2, 1);
-            message = `숨겨진 장소에서 특별 게스트 티켓을 발견했습니다! (+${ticketGain} 특별 티켓)`;
-            updateState({ resources: { ...gameState.resources, special_tickets: (gameState.resources.special_tickets || 0) + ticketGain } }, message);
+            const v = getRandomValue(2, 1);
+            updateState({ resources: { ...gameState.resources, special_tickets: (gameState.resources.special_tickets || 0) + v } }, `숨겨진 장소에서 특별 게스트 티켓을 발견했습니다! (+${v} 특별 티켓)`);
         } else {
-            const ideasGain = getRandomValue(10, 5);
-            message = `탐방 중 새로운 아이디어를 얻었습니다. (+${ideasGain} 아이디어)`;
-            updateState({ resources: { ...gameState.resources, ideas: gameState.resources.ideas + ideasGain } }, message);
+            const v = getRandomValue(10, 5);
+            updateState({ resources: { ...gameState.resources, ideas: gameState.resources.ideas + v } }, `탐방 중 새로운 아이디어를 얻었습니다. (+${v} 아이디어)`);
         }
     },
     show_resource_gathering_options: () => updateState({ currentScenarioId: 'action_resource_gathering' }),
@@ -564,22 +448,20 @@ function applyStatEffects() {
     let message = "";
     if (gameState.creativity >= 70) { gameState.dailyBonus.creationSuccess += 0.1; message += "높은 창의력 덕분에 자원 확보 성공률이 증가합니다. "; }
     if (gameState.passion >= 70) { gameState.maxActionPoints += 1; gameState.actionPoints = gameState.maxActionPoints; message += "넘치는 열정으로 행동력이 증가합니다. "; }
-    if (gameState.relationships >= 70) { gameState.artists.forEach(a => a.synergy = Math.min(100, a.synergy + 5)); message += "끈끈한 관계 덕분에 아티스트들의 시너지가 증가합니다. "; }
+    if (gameState.relationships >= 70) { const v = getRandomValue(2, 1); gameState.artists.forEach(a => a.synergy = Math.min(100, a.synergy + v)); message += `끈끈한 관계 덕분에 아티스트들의 시너지가 상승합니다. (+${v} 시너지) `; }
     if (gameState.energy < 30) { Object.keys(gameState.festivalBooths).forEach(key => { if(gameState.festivalBooths[key].built) gameState.festivalBooths[key].durability -= 2; }); message += "에너지가 부족하여 부스들이 빠르게 노후화됩니다. "; }
-    if (gameState.recognition >= 70) { gameState.resources.funds += getRandomValue(5, 2); message += "높은 인지도 덕분에 후원금이 자동으로 모금됩니다. "; }
+    if (gameState.recognition >= 70) { const v = getRandomValue(5, 2); gameState.resources.funds += v; message += `높은 인지도 덕분에 후원금이 자동으로 모금됩니다. (+${v} 자금) `; }
+    if (gameState.creativity < 30) { const v = getRandomValue(5, 2); gameState.passion -= v; message += `창의력 고갈로 열정이 감소합니다. (-${v} 열정) `; }
+    if (gameState.passion < 30) { const v = getRandomValue(5, 2); gameState.energy -= v; message += `열정이 식어 에너지가 감소합니다. (-${v} 에너지) `; }
+    if (gameState.relationships < 30) { const v = getRandomValue(5, 2); gameState.artists.forEach(a => a.synergy = Math.max(0, a.synergy - v)); message += `관계가 소홀해져 아티스트들의 시너지가 하락합니다. (-${v} 시너지) `; }
     return message;
 }
 
 const weightedDailyEvents = [
-    { id: "rain", weight: 10, condition: () => true, onTrigger: () => {
-        const durabilityLoss = getRandomValue(10, 5);
-        Object.keys(gameState.festivalBooths).forEach(key => { if(gameState.festivalBooths[key].built) gameState.festivalBooths[key].durability -= durabilityLoss; });
-        updateState({}, `예상치 못한 비로 인해 모든 부스의 내구도가 ${durabilityLoss}만큼 감소했습니다.`);
-    } },
-    { id: "viral", weight: 7, condition: () => gameState.recognition > 50, onTrigger: () => {
-        const recognitionGain = getRandomValue(15, 5);
-        updateState({ recognition: gameState.recognition + recognitionGain }, `축제의 한 장면이 SNS에서 화제가 되었습니다! (+${recognitionGain} 인지도)`);
-    } },
+    { id: "rain", weight: 10, condition: () => true, onTrigger: () => { const v = getRandomValue(10, 5); Object.keys(gameState.festivalBooths).forEach(key => { if(gameState.festivalBooths[key].built) gameState.festivalBooths[key].durability -= v; }); updateState({}, `예상치 못한 비로 인해 모든 부스의 내구도가 감소했습니다. (-${v} 내구성)`); } },
+    { id: "viral", weight: 7, condition: () => gameState.recognition > 50, onTrigger: () => { const v = getRandomValue(15, 5); updateState({ recognition: gameState.recognition + v }, `축제의 한 장면이 SNS에서 화제가 되었습니다! (+${v} 인지도)`); } },
+    { id: "new_artist", weight: 10, condition: () => gameState.festivalBooths.mainStage.built && gameState.artists.length < gameState.maxArtists, onTrigger: () => { updateState({ currentScenarioId: 'daily_event_new_artist' }, "새로운 아티스트가 축제에 참여하고 싶어합니다."); } },
+    { id: "conflict", weight: 15, condition: () => gameState.artists.length >= 2, onTrigger: () => { updateState({ currentScenarioId: 'daily_event_conflict' }, "아티스트 간에 창작 방향에 대한 의견 충돌이 생겼습니다."); } },
 ];
 
 function processDailyEvents() {
@@ -593,20 +475,24 @@ function processDailyEvents() {
     else if (gameState.relationships <= 0) { gameState.currentScenarioId = "game_over_relationships"; }
     else if (gameState.energy <= 0) { gameState.currentScenarioId = "game_over_energy"; }
     else if (gameState.recognition <= 0) { gameState.currentScenarioId = "game_over_recognition"; }
-    else if (gameState.resources.funds < 0) { gameState.currentScenarioId = "game_over_resources"; }
+    else if (gameState.resources.funds < 0 && gameState.day > 1) { gameState.currentScenarioId = "game_over_resources"; }
     let eventId = "intro";
     const possibleEvents = weightedDailyEvents.filter(event => !event.condition || event.condition());
-    const totalWeight = possibleEvents.reduce((sum, event) => sum + event.weight, 0);
-    const rand = currentRandFn() * totalWeight;
-    let cumulativeWeight = 0;
-    let chosenEvent = possibleEvents.find(event => (cumulativeWeight += event.weight) >= rand);
-    if (chosenEvent) {
-        eventId = chosenEvent.id;
-        if (chosenEvent.onTrigger) chosenEvent.onTrigger();
+    if (possibleEvents.length > 0) {
+        const totalWeight = possibleEvents.reduce((sum, event) => sum + event.weight, 0);
+        const rand = currentRandFn() * totalWeight;
+        let cumulativeWeight = 0;
+        let chosenEvent = possibleEvents.find(event => (cumulativeWeight += event.weight) >= rand);
+        if (chosenEvent) {
+            eventId = chosenEvent.id;
+            if (chosenEvent.onTrigger) chosenEvent.onTrigger();
+        }
     }
-    gameState.currentScenarioId = eventId;
-    updateGameDisplay(dailyMessage + (gameScenarios[eventId]?.text || ''));
-    renderChoices(gameScenarios[eventId]?.choices);
+    if (!gameScenarios[gameState.currentScenarioId]) { 
+        gameState.currentScenarioId = eventId;
+    }
+    updateGameDisplay(dailyMessage + (gameScenarios[gameState.currentScenarioId]?.text || ''));
+    renderChoices(gameScenarios[gameState.currentScenarioId]?.choices || []);
     saveGameState();
 }
 
@@ -635,7 +521,6 @@ window.onload = function() {
             updateState({
                 manualDayAdvances: gameState.manualDayAdvances + 1,
                 day: gameState.day + 1,
-                lastPlayedDate: new Date().toISOString().slice(0, 10),
                 dailyEventTriggered: false
             });
             processDailyEvents();
