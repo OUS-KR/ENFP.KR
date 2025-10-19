@@ -285,8 +285,8 @@ const gameScenarios = {
         choices: [
             { text: "아이디어 구상", action: "gather_ideas" },
             { text: "참가자 모집", action: "gather_participants" },
-            { text: "후원금 모금", "action": "gather_funds" },
-            { text: "취소", "action": "return_to_intro" }
+            { text: "후원금 모금", action: "gather_funds" },
+            { text: "취소", action: "return_to_intro" }
         ]
     },
     "action_booth_management": {
@@ -325,7 +325,7 @@ const brainstormOutcomes = [
             const creativityLoss = getRandomValue(5, 2);
             return {
                 changes: { energy: gs.energy - energyLoss, popularity: gs.popularity - popularityLoss, creativity: gs.creativity - creativityLoss },
-                message: "브레인스토밍이 시작되자마자 아티스트들의 불만이 터져 나왔습니다. 낮은 에너지로 인해 분위기가 험악합니다. (-${energyLoss} 에너지, -${popularityLoss} 인기, -${creativityLoss} 창의성)"
+                message: `브레인스토밍이 시작되자마자 아티스트들의 불만이 터져 나왔습니다. 낮은 에너지로 인해 분위기가 험악합니다. (-${energyLoss} 에너지, -${popularityLoss} 인기, -${creativityLoss} 창의성)`
             };
         }
     },
@@ -338,7 +338,7 @@ const brainstormOutcomes = [
             const creativityGain = getRandomValue(10, 3);
             return {
                 changes: { energy: gs.energy + energyGain, popularity: gs.popularity + popularityGain, creativity: gs.creativity + creativityGain },
-                message: "높은 창의성과 관계를 바탕으로 건설적인 브레인스토밍이 진행되었습니다! (+${energyGain} 에너지, +${popularityGain} 인기, +${creativityGain} 창의성)"
+                message: `높은 창의성과 관계를 바탕으로 건설적인 브레인스토밍이 진행되었습니다! (+${energyGain} 에너지, +${popularityGain} 인기, +${creativityGain} 창의성)`
             };
         }
     },
@@ -350,7 +350,7 @@ const brainstormOutcomes = [
             const creativityGain = getRandomValue(5, 2);
             return {
                 changes: { passion: gs.passion + passionGain, creativity: gs.creativity + creativityGain },
-                message: "아이디어가 부족한 상황에 대해 논의했습니다. 모두가 효율적인 아이디어 구상에 동의하며 당신의 리더십을 신뢰했습니다. (+${passionGain} 열정, +${creativityGain} 창의성)"
+                message: `아이디어가 부족한 상황에 대해 논의했습니다. 모두가 효율적인 아이디어 구상에 동의하며 당신의 리더십을 신뢰했습니다. (+${passionGain} 열정, +${creativityGain} 창의성)`
             };
         }
     },
@@ -365,7 +365,7 @@ const brainstormOutcomes = [
             const updatedArtists = gs.artists.map(a => a.id === artist.id ? { ...a, trust: Math.min(100, a.trust + trustGain) } : a);
             return {
                 changes: { artists: updatedArtists, energy: gs.energy + energyGain, creativity: gs.creativity + creativityGain },
-                message: "브레인스토밍 중, " + artist.name + "이(가) 조심스럽게 불만을 토로했습니다. 그의 의견을 존중하고 해결을 약속하자 신뢰를 얻었습니다. (+${trustGain} " + artist.name + " 시너지, +${energyGain} 에너지, +${creativityGain} 창의성)"
+                message: "브레인스토밍 중, " + artist.name + `이(가) 조심스럽게 불만을 토로했습니다. 그의 의견을 존중하고 해결을 약속하자 신뢰를 얻었습니다. (+${trustGain} ` + artist.name + ` 시너지, +${energyGain} 에너지, +${creativityGain} 창의성)`
             };
         }
     },
@@ -377,7 +377,7 @@ const brainstormOutcomes = [
             const popularityGain = getRandomValue(3, 1);
             return {
                 changes: { relationships: gs.relationships + relationshipsGain, popularity: gs.popularity + popularityGain },
-                message: "평범한 브레인스토밍이었지만, 모두가 한자리에 모여 아이디어를 나눈 것만으로도 의미가 있었습니다. (+${relationshipsGain} 관계, +${popularityGain} 인기)"
+                message: `평범한 브레인스토밍이었지만, 모두가 한자리에 모여 아이디어를 나눈 것만으로도 의미가 있었습니다. (+${relationshipsGain} 관계, +${popularityGain} 인기)`
             };
         }
     },
@@ -390,7 +390,7 @@ const brainstormOutcomes = [
             const creativityLoss = getRandomValue(5, 2);
             return {
                 changes: { energy: gs.energy - energyLoss, popularity: gs.popularity - popularityLoss, creativity: gs.creativity - creativityLoss },
-                message: "브레인스토밍은 길어졌지만, 의견 차이만 확인하고 끝났습니다. 아티스트들의 에너지와 인기, 당신의 창의성이 약간 감소했습니다. (-${energyLoss} 에너지, -${popularityLoss} 인기, -${creativityLoss} 창의성)"
+                message: `브레인스토밍은 길어졌지만, 의견 차이만 확인하고 끝났습니다. 아티스트들의 에너지와 인기, 당신의 창의성이 약간 감소했습니다. (-${energyLoss} 에너지, -${popularityLoss} 인기, -${creativityLoss} 창의성)`
             };
         }
     }
@@ -404,7 +404,7 @@ const scoutArtistsOutcomes = [
             const ideasGain = getRandomValue(10, 5);
             return {
                 changes: { resources: { ...gs.resources, ideas: gs.resources.ideas + ideasGain } },
-                message: "아티스트 섭외 중 새로운 아이디어를 발견했습니다! (+${ideasGain} 아이디어)"
+                message: `아티스트 섭외 중 새로운 아이디어를 발견했습니다! (+${ideasGain} 아이디어)`
             };
         }
     },
@@ -415,7 +415,7 @@ const scoutArtistsOutcomes = [
             const participantsGain = getRandomValue(10, 5);
             return {
                 changes: { resources: { ...gs.resources, participants: gs.resources.participants + participantsGain } },
-                message: "아티스트 섭외 중 새로운 참가자를 발견했습니다! (+${participantsGain} 참가자)"
+                message: `아티스트 섭외 중 새로운 참가자를 발견했습니다! (+${participantsGain} 참가자)`
             };
         }
     },
@@ -427,7 +427,7 @@ const scoutArtistsOutcomes = [
             const passionGain = getRandomValue(5, 2);
             return {
                 changes: { relationships: gs.relationships + relationshipsGain, passion: gs.passion + passionGain },
-                message: "아티스트를 섭외하며 새로운 관계와 열정을 얻었습니다. (+${relationshipsGain} 관계, +${passionGain} 열정)"
+                message: `아티스트를 섭외하며 새로운 관계와 열정을 얻었습니다. (+${relationshipsGain} 관계, +${passionGain} 열정)`
             };
         }
     },
@@ -440,7 +440,7 @@ const scoutArtistsOutcomes = [
             const popularityLoss = getRandomValue(5, 2);
             return {
                 changes: { actionPoints: gs.actionPoints - actionLoss, energy: gs.energy - energyLoss, popularity: gs.popularity - popularityLoss },
-                message: "아티스트 섭외에 너무 깊이 빠져 행동력을 소모하고 에너지와 인기가 감소했습니다. (-${actionLoss} 행동력, -${energyLoss} 에너지, -${popularityLoss} 인기)"
+                message: `아티스트 섭외에 너무 깊이 빠져 행동력을 소모하고 에너지와 인기가 감소했습니다. (-${actionLoss} 행동력, -${energyLoss} 에너지, -${popularityLoss} 인기)`
             };
         }
     },
@@ -452,7 +452,7 @@ const scoutArtistsOutcomes = [
             const relationshipsLoss = getRandomValue(5, 2);
             return {
                 changes: { creativity: gs.creativity - creativityLoss, relationships: gs.relationships - relationshipsLoss },
-                message: "아티스트 섭외 중 예상치 못한 문제에 부딪혀 창의성과 관계가 약간 감소했습니다. (-${creativityLoss} 창의성, -${relationshipsLoss} 관계)"
+                message: `아티스트 섭외 중 예상치 못한 문제에 부딪혀 창의성과 관계가 약간 감소했습니다. (-${creativityLoss} 창의성, -${relationshipsLoss} 관계)`
             };
         }
     }
@@ -469,7 +469,7 @@ const promoActivitiesOutcomes = [
             const updatedArtists = gs.artists.map(a => a.id === artist.id ? { ...a, trust: Math.min(100, a.trust + trustGain) } : a);
             return {
                 changes: { artists: updatedArtists, popularity: gs.popularity + popularityGain, energy: gs.energy + energyGain },
-                message: artist.name + "" + getWaGwaParticle(artist.name) + " 깊은 홍보 활동을 나누며 신뢰와 당신의 에너지를 얻었습니다. (+${trustGain} " + artist.name + " 시너지, +${popularityGain} 인기, +${energyGain} 에너지)"
+                message: artist.name + "" + getWaGwaParticle(artist.name) + ` 깊은 홍보 활동을 나누며 신뢰와 당신의 에너지를 얻었습니다. (+${trustGain} ` + artist.name + ` 시너지, +${popularityGain} 인기, +${energyGain} 에너지)`
             };
         }
     },
@@ -481,7 +481,7 @@ const promoActivitiesOutcomes = [
             const passionGain = getRandomValue(5, 2);
             return {
                 changes: { creativity: gs.creativity + creativityGain, passion: gs.passion + passionGain },
-                message: artist.name + "" + getWaGwaParticle(artist.name) + "와 자유로운 홍보 활동을 나누며 창의성과 열정이 상승했습니다. (+${creativityGain} 창의성, +${passionGain} 열정)"
+                message: artist.name + "" + getWaGwaParticle(artist.name) + `와 자유로운 홍보 활동을 나누며 창의성과 열정이 상승했습니다. (+${creativityGain} 창의성, +${passionGain} 열정)`
             };
         }
     },
@@ -492,7 +492,7 @@ const promoActivitiesOutcomes = [
             const participantsGain = getRandomValue(5, 2);
             return {
                 changes: { resources: { ...gs.resources, participants: gs.resources.participants + participantsGain } },
-                message: artist.name + "" + getWaGwaParticle(artist.name) + "의 공연 홍보에 대한 유용한 정보를 얻어 참가자를 추가로 확보했습니다. (+${participantsGain} 참가자)"
+                message: artist.name + "" + getWaGwaParticle(artist.name) + `의 공연 홍보에 대한 유용한 정보를 얻어 참가자를 추가로 확보했습니다. (+${participantsGain} 참가자)`
             };
         }
     },
@@ -504,7 +504,7 @@ const promoActivitiesOutcomes = [
             const popularityGain = getRandomValue(3, 1);
             return {
                 changes: { relationships: gs.relationships + relationshipsGain, popularity: gs.popularity + popularityGain },
-                message: artist.name + "" + getWaGwaParticle(artist.name) + " 소소한 홍보 활동을 나누며 관계와 당신의 인기가 조금 더 단단해졌습니다. (+${relationshipsGain} 관계, +${popularityGain} 인기)"
+                message: artist.name + "" + getWaGwaParticle(artist.name) + ` 소소한 홍보 활동을 나누며 관계와 당신의 인기가 조금 더 단단해졌습니다. (+${relationshipsGain} 관계, +${popularityGain} 인기)`
             };
         }
     },
@@ -518,7 +518,7 @@ const promoActivitiesOutcomes = [
             const updatedArtists = gs.artists.map(a => a.id === artist.id ? { ...a, trust: Math.max(0, a.trust - trustLoss) } : a);
             return {
                 changes: { artists: updatedArtists, energy: gs.energy - energyLoss, popularity: gs.popularity - popularityLoss },
-                message: artist.name + "" + getWaGwaParticle(artist.name) + " 홍보 활동 중 오해를 사서 친밀도와 에너지, 당신의 인기가 감소했습니다. (-${trustLoss} " + artist.name + " 시너지, -${energyLoss} 에너지, -${popularityLoss} 인기)"
+                message: artist.name + "" + getWaGwaParticle(artist.name) + ` 홍보 활동 중 오해를 사서 친밀도와 에너지, 당신의 인기가 감소했습니다. (-${trustLoss} ` + artist.name + ` 시너지, -${energyLoss} 에너지, -${popularityLoss} 인기)`
             };
         }
     },
@@ -530,7 +530,7 @@ const promoActivitiesOutcomes = [
             const creativityLoss = getRandomValue(5, 2);
             return {
                 changes: { actionPoints: gs.actionPoints - actionLoss, creativity: gs.creativity - creativityLoss },
-                message: artist.name + "" + getWaGwaParticle(artist.name) + " 홍보 활동이 길어졌지만, 특별한 소득은 없었습니다. 당신의 창의성이 감소했습니다. (-${actionLoss} 행동력, -${creativityLoss} 창의성)"
+                message: artist.name + "" + getWaGwaParticle(artist.name) + ` 홍보 활동이 길어졌지만, 특별한 소득은 없었습니다. 당신의 창의성이 감소했습니다. (-${actionLoss} 행동력, -${creativityLoss} 창의성)`
             };
         }
     }
@@ -669,7 +669,7 @@ const minigames = [
             gameArea.innerHTML = `<p>${minigames[1].description}</p><p>게임을 시작합니다!</p>`;
             choicesDiv.innerHTML = `<button class="choice-btn" onclick="minigames[1].processAction('endGame')">게임 종료</button>`;
         },
-        render: () {},
+        render: function() {},
         processAction: (actionType) => {
             if (actionType === 'endGame') {
                 minigames[1].end();
@@ -693,7 +693,7 @@ const minigames = [
             gameArea.innerHTML = `<p>${minigames[2].description}</p><p>게임을 시작합니다!</p>`;
             choicesDiv.innerHTML = `<button class="choice-btn" onclick="minigames[2].processAction('endGame')">게임 종료</button>`;
         },
-        render: () {},
+        render: function() {},
         processAction: (actionType) => {
             if (actionType === 'endGame') {
                 minigames[2].end();
@@ -717,7 +717,7 @@ const minigames = [
             gameArea.innerHTML = `<p>${minigames[3].description}</p><p>게임을 시작합니다!</p>`;
             choicesDiv.innerHTML = `<button class="choice-btn" onclick="minigames[3].processAction('endGame')">게임 종료</button>`;
         },
-        render: () {},
+        render: function() {},
         processAction: (actionType) => {
             if (actionType === 'endGame') {
                 minigames[3].end();
@@ -741,7 +741,7 @@ const minigames = [
             gameArea.innerHTML = `<p>${minigames[4].description}</p><p>게임을 시작합니다!</p>`;
             choicesDiv.innerHTML = `<button class="choice-btn" onclick="minigames[4].processAction('endGame')">게임 종료</button>`;
         },
-        render: () {},
+        render: function() {},
         processAction: (actionType) => {
             if (actionType === 'endGame') {
                 minigames[4].end();
@@ -974,7 +974,7 @@ const gameActions = {
         const creativityLoss = getRandomValue(10, 3);
         const passionLoss = getRandomValue(5, 2);
         const relationshipsLoss = getRandomValue(5, 2);
-        message = "새로운 아티스트의 섭외를 거절했습니다. 축제의 창의성과 열정, 관계가 감소합니다. (" + creativityLoss + " 창의성, " + passionLoss + " 열정, " + relationshipsLoss + " 관계)";
+        const message = "새로운 아티스트의 섭외를 거절했습니다. 축제의 창의성과 열정, 관계가 감소합니다. (" + creativityLoss + " 창의성, " + passionLoss + " 열정, " + relationshipsLoss + " 관계)";
         updateState({ creativity: gameState.creativity - creativityLoss, passion: gameState.passion - passionLoss, relationships: gameState.relationships - relationshipsLoss, pendingNewArtist: null, currentScenarioId: 'intro' }, message);
     },
     accept_patronage: () => {
@@ -1390,7 +1390,7 @@ function processDailyEvents() {
     // --- New Weighted Random Event Logic ---
     let eventId = "intro";
     const possibleEvents = weightedDailyEvents.filter(event => !event.condition || event.condition());
-    const totalWeight = possibleEvents.reduce((sum, event) => sum + event.weight, 0);
+    const totalWeight = possibleOutcomes.reduce((sum, event) => sum + event.weight, 0);
     const rand = currentRandFn() * totalWeight;
 
     let cumulativeWeight = 0;
