@@ -2,223 +2,152 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="ENFP(재기발랄한 활동가)를 위한 에너지 넘치는 게임 컬렉션. 반짝이는 영감, 즉흥적인 모험, 리듬과 함께하는 텐션 업 미니게임.">
-    <meta name="keywords" content="ENFP, 엔프피, MBTI 게임, 미니게임, 힐링게임, 무료 웹게임, 리듬게임, 액션게임">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta property="og:title" content="ENFP Mini Games - 재기발랄 놀이터">
-    <meta property="og:description" content="ENFP를 위한 다섯 가지 활기찬 미니게임 컬렉션">
     <title>ENFP Mini Games - 재기발랄 놀이터</title>
+    <meta name="description" content="ENFP를 위한 에너지 넘치는 게임 컬렉션. 리듬, 액션, 순발력을 테스트해보세요!">
     <style>
-        /* --- 기본 스타일 --- */
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Varela+Round&display=swap');
 
+        * { box-sizing: border-box; touch-action: none; user-select: none; -webkit-user-select: none; }
+        
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: #111;
-            color: #e0e0e0;
+            color: #fff;
             font-family: 'Noto Sans KR', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.7;
-            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
         }
 
         .page-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%; height: 100vh;
         }
 
-        /* --- 상단 헤더 & 메뉴 (ENFP 테마) --- */
+        /* Header */
         header {
             width: 100%;
-            background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%); /* ENFP Colors */
-            border-bottom: 1px solid #ffb5b5;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%);
+            padding: 10px 0;
             box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            z-index: 100;
         }
-
-        .header-content {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 10px 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        
+        .header-content { text-align: center; max-width: 700px; margin: 0 auto; padding: 0 15px; }
 
         h1 {
-            font-size: 18px;
-            margin: 0 0 10px 0;
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            letter-spacing: -0.5px;
-            font-weight: 700;
+            margin: 0 0 10px 0; font-size: 18px; font-family: 'Varela Round', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .game-nav {
-            display: flex;
-            gap: 6px;
-            width: 100%;
-            max-width: 100%; 
-            justify-content: center; 
-            flex-wrap: wrap;
-            padding-bottom: 5px;
+            display: flex; justify-content: center; gap: 6px; 
+            width: 100%; overflow-x: auto; padding-bottom: 5px;
         }
+        .game-nav::-webkit-scrollbar { display: none; }
 
         .nav-btn {
-            flex: 0 0 auto;
-            padding: 8px 12px;
-            border: none;
-            background: rgba(255, 255, 255, 0.3);
-            color: #fff;
-            font-family: 'Varela Round', sans-serif; 
-            font-weight: bold;
-            font-size: 13px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-            margin-bottom: 5px;
+            flex: 0 0 auto; padding: 8px 12px;
+            border: none; background: rgba(255,255,255,0.3);
+            border-radius: 20px; color: #fff; font-weight: bold; font-size: 13px;
+            cursor: pointer; transition: all 0.2s;
         }
+        .nav-btn.active { background: #fff; color: #FF6B6B; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transform: scale(1.05); }
 
-        .nav-btn.active {
-            background: #fff;
-            color: #ff6b6b;
-            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .nav-btn:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.6);
-        }
-
-        /* --- 게임 영역 --- */
+        /* Game Wrapper (Letterbox Layout) */
         #game-wrapper {
-            position: relative;
-            width: 100%;
-            max-width: 450px;
-            height: 75vh;
-            max-height: 800px;
-            min-height: 500px;
-            margin: 20px auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 4px solid #ffecd2;
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative; width: 100%; max-width: 450px; 
+            height: 75vh; max-height: 800px; min-height: 500px;
+            margin: 20px auto; 
+            background: #000; 
+            border-radius: 12px; overflow: hidden; border: 4px solid #ffecd2;
+            display: flex; justify-content: center; align-items: center;
         }
 
         #game-wrapper:fullscreen {
-            width: 100vw;
-            height: 100vh;
-            max-width: none;
-            max-height: none;
-            margin: 0;
-            border: none;
-            border-radius: 0;
+            width: 100vw; height: 100vh; max-width: none; max-height: none;
+            margin: 0; border: none; border-radius: 0;
         }
 
         #game-stage {
             position: relative;
-            background-color: #221019;
+            background-color: #221019; /* 기본 배경 */
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
             overflow: hidden;
+            /* JS will set width/height */
         }
 
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            touch-action: none;
+        canvas { display: block; width: 100%; height: 100%; }
+
+        /* UI Layer */
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 20;
         }
 
-        #ui-layer { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; 
-        }
-        
-        #score-board { 
-            position: absolute; top: 20px; left: 20px; 
-            font-size: 20px; font-weight: bold; color: #fff; 
-            background: rgba(0, 0, 0, 0.4); padding: 8px 15px; 
-            border-radius: 20px; backdrop-filter: blur(2px); 
-            border: 2px solid rgba(255,255,255,0.4);
-            font-family: 'Varela Round', sans-serif;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        #score-board {
+            position: absolute; top: 20px; left: 20px;
+            font-family: 'Varela Round', sans-serif; font-size: 24px;
+            color: #fff; text-shadow: 2px 2px 0 #000;
         }
 
         .ui-controls {
             position: absolute; top: 20px; right: 20px;
-            display: flex; gap: 10px; pointer-events: auto; z-index: 20;
+            display: flex; gap: 10px; pointer-events: auto;
         }
-
         .control-btn {
-            width: 40px; height: 40px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%; color: white; font-size: 18px;
-            cursor: pointer; display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(2px); transition: background 0.2s, transform 0.1s;
+            width: 40px; height: 40px; background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.5); border-radius: 50%;
+            color: #fff; font-size: 18px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
         }
-        .control-btn:hover { background: rgba(255, 165, 0, 0.8); }
-        .control-btn:active { transform: scale(0.9); }
 
-        /* 오버레이 */
         .screen-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 107, 107, 0.85);
-            display: flex; flex-direction: column; 
-            justify-content: center; align-items: center;
-            z-index: 10; pointer-events: auto;
-            backdrop-filter: blur(4px);
-            transition: opacity 0.3s;
+            background: rgba(255, 107, 107, 0.9);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            pointer-events: auto; transition: opacity 0.3s;
         }
         .hidden { display: none !important; }
 
-        .screen-overlay h2 { color: #fff; font-size: 32px; margin-bottom: 10px; text-align: center; text-shadow: 0 4px 10px rgba(255, 165, 0, 0.8); font-family: 'Varela Round', sans-serif; }
-        .desc { color: #fff; margin-bottom: 30px; font-size: 15px; text-align: center; line-height: 1.6; white-space: pre-line; font-weight: 500;}
-        
-        button.game-btn {
-            background: #fff;
-            color: #ff6b6b; border: none; padding: 15px 40px;
-            font-size: 18px; border-radius: 50px; cursor: pointer;
-            font-weight: bold; box-shadow: 0 5px 0px #d64545;
-            transition: transform 0.1s; margin-bottom: 15px; min-width: 200px;
-            font-family: 'Varela Round', sans-serif;
+        h2 { font-family: 'Varela Round', sans-serif; font-size: 32px; margin-bottom: 10px; text-align: center; }
+        p.desc { font-size: 14px; margin-bottom: 30px; text-align: center; line-height: 1.5; white-space: pre-line; font-weight: 500; }
+
+        button.start-btn {
+            background: #fff; color: #FF6B6B; border: none;
+            padding: 15px 40px; border-radius: 50px;
+            font-size: 18px; font-weight: bold; font-family: 'Varela Round', sans-serif;
+            box-shadow: 0 5px 0 #D44646; cursor: pointer; transition: transform 0.1s;
             touch-action: manipulation;
         }
-        button.game-btn:active { transform: translateY(4px); box-shadow: 0 1px 0px #d64545; }
-        
-        .game-tip { background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; color: #fff; }
-        .adsense-slot { width: 300px; height: 250px; background-color: #fff; display: flex; justify-content: center; align-items: center; color: #999; font-size: 14px; margin-top: 20px; border-radius: 8px; border: 1px dashed #ccc; }
+        button.start-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #D44646; }
 
-        #youtube-player-container { position: absolute; top: 0; left: 0; width: 1px; height: 1px; opacity: 0.01; z-index: -1; pointer-events: none; }
+        .game-tip { margin-top: 20px; background: rgba(0,0,0,0.2); padding: 8px 15px; border-radius: 10px; font-size: 12px; }
+        .adsense-slot { width: 300px; height: 250px; background: #fff; margin-top: 20px; display: flex; justify-content: center; align-items: center; color: #999; font-size: 14px; }
 
-        /* --- 콘텐츠 섹션 --- */
-        .content-container { width: 100%; background-color: #222; display: flex; justify-content: center; padding: 40px 20px; flex: 1; }
-        .content-section { width: 100%; max-width: 700px; color: #eee; display: none; }
-        .content-section.active-content { display: block; }
-        .content-section h3 { color: #ff9a9e; border-bottom: 2px solid #555; padding-bottom: 15px; margin-top: 10px; font-size: 1.4rem; line-height: 1.4; }
-        .content-section p { margin-bottom: 20px; text-align: justify; line-height: 1.8; word-break: keep-all; }
-        
-        .highlight-box { 
-            background: #333; padding: 25px; border-radius: 12px; border-left: 5px solid #ff9a9e; margin: 30px 0; 
+        /* Rhythm Game UI */
+        .rhythm-lanes {
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            display: none; pointer-events: none; z-index: 5;
         }
-        .highlight-box h4 { margin: 0 0 10px 0; color: #ffcfdf; font-size: 16px; }
-        .highlight-box ul { margin: 0; padding-left: 20px; }
-        .highlight-box li { margin-bottom: 5px; }
+        .rhythm-lanes.active { display: flex; }
+        .lane { flex: 1; position: relative; border-right: 1px solid rgba(255,255,255,0.1); }
+        .lane:last-child { border: none; }
+        .lane-btn {
+            position: absolute; bottom: 20px; left: 5%; width: 90%; height: 100px;
+            border: 2px solid rgba(255,255,255,0.5); border-radius: 15px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1));
+        }
+        .lane-btn.pressed { background: rgba(255,255,255,0.4); transform: scale(0.95); border-color: #fff; }
+
+        /* Footer */
+        .content-container { width: 100%; background: #222; padding: 40px 20px; flex: 1; display: flex; justify-content: center; }
+        .content-section { width: 100%; max-width: 700px; display: none; }
+        .content-section.active-content { display: block; }
+        .content-section h3 { color: #ff9a9e; border-bottom: 2px solid #555; padding-bottom: 15px; margin-top: 10px; font-size: 1.4rem; }
+        .content-section p { margin-bottom: 20px; text-align: justify; }
+        .highlight-box { background: #333; padding: 25px; border-radius: 12px; border-left: 5px solid #ff9a9e; margin: 30px 0; }
         
-        footer { width: 100%; text-align: center; padding: 40px 0; background: #111; color: #666; font-size: 13px; }
-        footer a { color: #888; text-decoration: none; margin: 0 10px; }
+        #youtube-player-container { position: absolute; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; }
     </style>
 </head>
 <body>
@@ -228,11 +157,11 @@
         <div class="header-content">
             <h1>✨ ENFP Mini Games</h1>
             <nav class="game-nav">
-                <button class="nav-btn active" onclick="switchGame('sparkle')">Sparkling Vibe</button>
-                <button class="nav-btn" onclick="switchGame('adventure')">Spontaneous Adventure</button>
-                <button class="nav-btn" onclick="switchGame('playlist')">Our Playlist</button>
-                <button class="nav-btn" onclick="switchGame('highfive')">Shake Off the Blues</button>
-                <button class="nav-btn" onclick="switchGame('rainbow')">Rainbow Paint</button>
+                <button class="nav-btn active" onclick="setGame('sparkle')">Sparkling Vibe</button>
+                <button class="nav-btn" onclick="setGame('adventure')">Spontaneous Adventure</button>
+                <button class="nav-btn" onclick="setGame('playlist')">Our Playlist</button>
+                <button class="nav-btn" onclick="setGame('highfive')">High-Five</button>
+                <button class="nav-btn" onclick="setGame('rainbow')">Rainbow Paint</button>
             </nav>
         </div>
     </header>
@@ -241,26 +170,34 @@
         <div id="game-stage">
             <canvas id="gameCanvas"></canvas>
             
+            <!-- Rhythm UI -->
+            <div id="rhythm-ui" class="rhythm-lanes">
+                <div class="lane"><div class="lane-btn" id="lane-0"></div></div>
+                <div class="lane"><div class="lane-btn" id="lane-1"></div></div>
+                <div class="lane"><div class="lane-btn" id="lane-2"></div></div>
+            </div>
+
             <div id="ui-layer">
                 <div id="score-board">SCORE: 0</div>
                 <div class="ui-controls">
-                    <button class="control-btn" onclick="openMusicLink()" title="음악 감상 (유튜브)">🎵</button>
+                    <button class="control-btn" onclick="openMusicLink()" title="음악 감상">🎵</button>
                     <button class="control-btn" onclick="toggleFullScreen()" title="전체 화면">⛶</button>
                 </div>
-                
+
+                <!-- Start Screen -->
                 <div id="start-screen" class="screen-overlay">
-                    <h2 id="title-text">Sparkling<br>Vibe</h2>
-                    <p class="desc" id="desc-text">반짝이는 아이디어를 모으세요!<br>터치로 이동</p>
-                    <button class="game-btn" onclick="startGame()">START</button>
-                    <div class="game-tip" id="game-tip-text">💡 Tip: 화면의 보석을 빠르게 터치하세요!</div>
+                    <h2 id="title">Sparkling Vibe</h2>
+                    <p class="desc" id="desc">반짝이는 영감을 터치하세요!</p>
+                    <button class="start-btn" onclick="startGame()">START</button>
+                    <div class="game-tip" id="tip">Tip: 보석이 사라지기 전에 터치!</div>
                     <div class="adsense-slot">300x250</div>
                 </div>
 
+                <!-- Game Over Screen -->
                 <div id="game-over-screen" class="screen-overlay hidden">
-                    <h2 id="game-over-title">GAME OVER</h2>
-                    <p class="desc" id="final-score">SCORE: 0</p>
-                    <button class="game-btn" onclick="startGame()">RETRY</button>
-                    <button class="game-btn" onclick="shareScore()" style="background: #ffecd2; color: #ff6b6b;">SHARE</button>
+                    <h2>GAME OVER</h2>
+                    <p class="desc" id="final-score">Score: 0</p>
+                    <button class="start-btn" onclick="startGame()">RETRY</button>
                     <div class="adsense-slot">300x250</div>
                 </div>
             </div>
@@ -275,87 +212,32 @@
         <!-- 1. Sparkling Vibe -->
         <article class="content-section active-content" id="content-sparkle">
             <h3>Sparkling Vibe: 반짝이는 영감 잡기</h3>
-            <p>
-                <strong>Sparkling Vibe</strong>는 ENFP의 머릿속에서 끊임없이 튀어나오는 아이디어와 영감을 시각화한 캐주얼 팝 게임입니다.
-                화면 곳곳에서 나타났다가 사라지는 <strong>'영감의 빛(보석)'</strong>을 놓치지 말고 빠르게 터치하세요.
-                ENFP에게 세상은 가능성으로 가득 찬 반짝이는 무대입니다.
-            </p>
-            <div class="highlight-box">
-                <h4>🎮 플레이 방법</h4>
-                <ul>
-                    <li><strong>조작:</strong> 화면에 나타나는 원(보석)을 직접 터치 또는 클릭</li>
-                    <li><strong>목표:</strong> 사라지기 전에 빠르게 눌러 점수를 획득하세요.</li>
-                    <li><strong>팁:</strong> 연속으로 성공하면 콤보 점수가 올라갑니다!</li>
-                </ul>
-            </div>
+            <p>ENFP의 머릿속에서 끊임없이 튀어나오는 아이디어와 영감을 시각화한 게임입니다. 하늘에서 떨어지는 반짝이는 <strong>'영감(보석)'</strong>을 모으세요. 하지만 지루함(회색 돌)은 피해야 합니다.</p>
+            <div class="highlight-box"><strong>💡 팁:</strong> 연속으로 성공하면 콤보 점수가 올라갑니다!</div>
         </article>
-
-        <!-- 2. Spontaneous Adventure -->
+        <!-- 2. Adventure -->
         <article class="content-section" id="content-adventure">
             <h3>Spontaneous Adventure: 즉흥적인 모험</h3>
-            <p>
-                계획 없는 여행만큼 설레는 게 있을까요? <strong>Spontaneous Adventure</strong>는 지그재그로 꺾이는 길을 달리는 러닝 게임입니다.
-                화면을 터치할 때마다 방향이 바뀝니다. 갑작스러운 방향 전환에도 당황하지 말고 본능적인 감각으로 길을 찾아가세요.
-            </p>
-            <div class="highlight-box">
-                <h4>🎮 플레이 방법</h4>
-                <ul>
-                    <li><strong>조작:</strong> 스페이스바, 클릭, 또는 화면 터치</li>
-                    <li><strong>규칙:</strong> 터치할 때마다 캐릭터가 왼쪽/오른쪽으로 90도 방향을 틉니다.</li>
-                    <li><strong>목표:</strong> 낭떠러지로 떨어지지 않고 최대한 멀리 가세요.</li>
-                </ul>
-            </div>
+            <p>계획 없는 여행만큼 설레는 게 있을까요? 지그재그로 꺾이는 길을 달리는 러닝 게임입니다. 화면을 터치할 때마다 방향이 바뀝니다.</p>
+            <div class="highlight-box"><strong>💡 팁:</strong> 초반엔 천천히, 갈수록 빨라집니다. 집중하세요!</div>
         </article>
-
-        <!-- 3. Our Playlist -->
+        <!-- 3. Playlist -->
         <article class="content-section" id="content-playlist">
             <h3>Our Playlist: 너와 나의 플레이리스트</h3>
-            <p>
-                ENFP는 사람들과 감정을 공유하는 것을 사랑합니다. <strong>Our Playlist</strong>는 음악의 리듬에 맞춰 떨어지는 노트를 잡는 리듬 액션 게임입니다.
-                3개의 라인에서 떨어지는 LP판(노트)이 판정선에 닿을 때 정확하게 눌러주세요. 신나는 파티 분위기를 즐겨보세요!
-            </p>
-            <div class="highlight-box">
-                <h4>🎮 플레이 방법</h4>
-                <ul>
-                    <li><strong>조작:</strong> 화면 하단의 3개 버튼 터치 또는 키보드 (←, ↓, →)</li>
-                    <li><strong>목표:</strong> 음악에 맞춰 떨어지는 노트를 타이밍 좋게 처리하세요.</li>
-                </ul>
-            </div>
+            <p>음악의 리듬에 맞춰 떨어지는 노트를 잡는 리듬 액션 게임입니다. 3개의 라인에서 떨어지는 LP판(노트)이 판정선에 닿을 때 정확하게 눌러주세요.</p>
+            <div class="highlight-box"><strong>💡 팁:</strong> 버튼을 정확히 눌러야 콤보가 이어집니다.</div>
         </article>
-
-        <!-- 4. Shake Off the Blues -->
+        <!-- 4. High-Five -->
         <article class="content-section" id="content-highfive">
             <h3>Shake Off the Blues: 우울함 털고 하이파이브!</h3>
-            <p>
-                아무리 밝은 ENFP라도 가끔은 우울해질 때가 있죠. 하지만 금방 털어낼 수 있어요! 
-                <strong>Shake Off the Blues</strong>는 몰려드는 '우울한 구름'을 요리조리 피하며, 친구들과 '하이파이브(하트)'를 하는 액션 게임입니다.
-                캐릭터는 당신의 손가락을 따라다닙니다. 긍정의 힘으로 무빙하세요!
-            </p>
-            <div class="highlight-box">
-                <h4>🎮 플레이 방법</h4>
-                <ul>
-                    <li><strong>이동:</strong> 화면을 터치한 상태로 드래그 (캐릭터가 따라옴)</li>
-                    <li><strong>목표:</strong> 파란색 구름은 피하고, 분홍색 하트는 획득하세요.</li>
-                </ul>
-            </div>
+            <p>몰려드는 '우울한 구름'을 요리조리 피하며, 친구들과 '하이파이브(하트)'를 하는 액션 게임입니다. 긍정의 힘으로 날아오르세요!</p>
+            <div class="highlight-box"><strong>💡 팁:</strong> 화면을 누른 상태로 움직여야(드래그) 캐릭터가 이동합니다.</div>
         </article>
-
-        <!-- 5. Rainbow Paint -->
+        <!-- 5. Rainbow -->
         <article class="content-section" id="content-rainbow">
             <h3>Rainbow Paint: 무지개 물감 꼬리잡기</h3>
-            <p>
-                세상을 다채로운 색으로 칠해볼까요? <strong>Rainbow Paint</strong>는 고전 스네이크 게임을 ENFP 스타일로 재해석했습니다.
-                화면을 밀어서(스와이프) 방향을 바꾸고, 색깔 물감을 먹을수록 꼬리가 길어지며 무지개색으로 변합니다.
-                나만의 색깔로 캔버스를 가득 채워보세요.
-            </p>
-            <div class="highlight-box">
-                <h4>🎮 플레이 방법</h4>
-                <ul>
-                    <li><strong>이동:</strong> 화면을 상하좌우로 스와이프(밀기) 또는 방향키</li>
-                    <li><strong>규칙:</strong> 벽이나 자신의 몸에 닿으면 게임 오버.</li>
-                    <li><strong>목표:</strong> 물감을 먹어 최대한 길어지세요.</li>
-                </ul>
-            </div>
+            <p>세상을 다채로운 색으로 칠해볼까요? 화면을 밀어서(스와이프) 방향을 바꾸고, 색깔 물감을 먹을수록 꼬리가 길어집니다.</p>
+            <div class="highlight-box"><strong>💡 팁:</strong> 꼬리가 길어질수록 자신의 몸에 닿지 않게 조심하세요.</div>
         </article>
     </div>
 </div>
@@ -363,49 +245,35 @@
 <script>
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    const gameWrapper = document.getElementById('game-wrapper');
-    const gameStage = document.getElementById('game-stage');
+    const wrapper = document.getElementById('game-wrapper');
+    const stage = document.getElementById('game-stage');
     const scoreEl = document.getElementById('score-board');
     
-    // 고정 해상도 (9:16 비율)
+    // 고정 논리 해상도 (9:16)
     const LOGICAL_WIDTH = 360;
     const LOGICAL_HEIGHT = 640;
-    let scaleRatio = 1; 
+    let scaleRatio = 1;
 
-    // UI Elements
-    const startScreen = document.getElementById('start-screen');
-    const gameOverScreen = document.getElementById('game-over-screen');
-    const titleText = document.getElementById('title-text');
-    const descText = document.getElementById('desc-text');
-    const gameTipText = document.getElementById('game-tip-text');
-    const gameOverTitle = document.getElementById('game-over-title');
-    const finalScoreEl = document.getElementById('final-score');
-    
-    const contents = {
-        sparkle: document.getElementById('content-sparkle'),
-        adventure: document.getElementById('content-adventure'),
-        playlist: document.getElementById('content-playlist'),
-        highfive: document.getElementById('content-highfive'),
-        rainbow: document.getElementById('content-rainbow')
-    };
-    const navBtns = document.querySelectorAll('.nav-btn');
+    let state = { mode: 'sparkle', isPlaying: false, score: 0, frame: 0, loopId: null };
+    let isDragging = false; // HighFive용 드래그 상태
 
-    let currentGameMode = 'sparkle';
-    let isPlaying = false;
-    let gameLoopId;
-    let frame = 0; // 프레임 카운터
+    // BGM
+    const bgmIds = { sparkle:'kqtA3IltXhQ', adventure:'dryoW1ExrHo', playlist:'OZ8pwy3a5ZM', highfive:'0CGHpj6LuX0', rainbow:'ozaBa5avUd8' };
+    let ytPlayer;
 
-    // --- 리사이즈 로직 ---
+    // --- 리사이즈 로직 (INFP 페이지와 동일) ---
     function resize() {
-        const containerW = gameWrapper.clientWidth;
-        const containerH = gameWrapper.clientHeight;
+        const containerW = wrapper.clientWidth;
+        const containerH = wrapper.clientHeight;
         const scaleX = containerW / LOGICAL_WIDTH;
         const scaleY = containerH / LOGICAL_HEIGHT;
         scaleRatio = Math.min(scaleX, scaleY);
+
         const targetW = Math.floor(LOGICAL_WIDTH * scaleRatio);
         const targetH = Math.floor(LOGICAL_HEIGHT * scaleRatio);
-        gameStage.style.width = `${targetW}px`;
-        gameStage.style.height = `${targetH}px`;
+
+        stage.style.width = `${targetW}px`;
+        stage.style.height = `${targetH}px`;
         canvas.width = LOGICAL_WIDTH;
         canvas.height = LOGICAL_HEIGHT;
         ctx.imageSmoothingEnabled = true;
@@ -414,486 +282,479 @@
     setTimeout(resize, 100);
     document.addEventListener('fullscreenchange', () => setTimeout(resize, 100));
 
-    function toggleFullScreen() {
-        if (!document.fullscreenElement) gameWrapper.requestFullscreen().catch(e=>{});
-        else document.exitFullscreen();
-    }
-    function openMusicLink() {
-        const videoId = youtubeVideoIds[currentGameMode];
-        if (videoId) window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
-    }
+    // --- 게임 모듈 ---
 
-    // Sound Manager
-    const SoundManager = {
-        ctx: null,
-        init: function() {
-            if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-            if (this.ctx.state === 'suspended') this.ctx.resume();
-        },
-        playTone: function(freq, type, duration, vol=0.1) {
-            if (!this.ctx) return;
-            const osc = this.ctx.createOscillator(); const gain = this.ctx.createGain();
-            osc.type = type; osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-            gain.gain.setValueAtTime(vol, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
-            osc.connect(gain); gain.connect(this.ctx.destination);
-            osc.start(); osc.stop(this.ctx.currentTime + duration);
-        },
-        playPop: function() { this.playTone(800, 'sine', 0.1, 0.1); },
-        playTurn: function() { this.playTone(400, 'square', 0.05, 0.05); },
-        playBeat: function() { this.playTone(200, 'sawtooth', 0.1, 0.05); },
-        playScore: function() { this.playTone(1200, 'sine', 0.1, 0.1); },
-        playGameOver: function() { this.playTone(150, 'triangle', 0.5, 0.2); }
-    };
-
-    // YouTube BGM
-    const youtubeVideoIds = {
-        sparkle: 'kqtA3IltXhQ', adventure: 'dryoW1ExrHo', playlist: 'OZ8pwy3a5ZM',
-        highfive: '0CGHpj6LuX0', rainbow: 'ozaBa5avUd8'
-    };
-    let player; let isPlayerReady = false;
-
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube-player', {
-            height: '1', width: '1', videoId: youtubeVideoIds[currentGameMode],
-            playerVars: { 'autoplay': 0, 'controls': 0, 'showinfo': 0, 'rel': 0, 'loop': 1, 'playlist': youtubeVideoIds[currentGameMode] },
-            events: { 'onReady': (e)=>{isPlayerReady=true; e.target.setVolume(30);}, 'onStateChange': (e)=>{if(e.data===YT.PlayerState.ENDED) player.playVideo();} }
-        });
-    }
-    function playBgm() {
-        if (isPlayerReady && player && player.loadVideoById) {
-            const targetId = youtubeVideoIds[currentGameMode];
-            try {
-                if (player.getVideoData && player.getVideoData().video_id !== targetId) {
-                     player.loadVideoById({videoId: targetId, startSeconds: 0, suggestedQuality: 'small'});
-                } else { player.seekTo(0); player.playVideo(); }
-            } catch(e) {}
-        }
-    }
-    function stopBgm() { if (isPlayerReady && player && player.pauseVideo) player.pauseVideo(); }
-
-    // --- GAME MODULES (New ENFP Games) ---
-
-    // 1. Sparkling Vibe (Pop)
-    const sparkleGame = {
-        items: [], score: 0,
-        init() { this.items = []; this.score = 0; },
+    // 1. Sparkling Vibe (Pop) - 배경 강화
+    const GameSparkle = {
+        items: [],
+        init() { this.items = []; state.score = 0; },
         update() {
-            if (frame % 40 === 0) {
+            if (state.frame % 40 === 0) {
+                const size = 40 + Math.random() * 30;
                 this.items.push({
-                    x: Math.random() * (LOGICAL_WIDTH - 60) + 30,
-                    y: Math.random() * (LOGICAL_HEIGHT - 150) + 50,
-                    r: 0, maxR: 30 + Math.random()*20, growing: true, color: `hsl(${Math.random()*360}, 80%, 70%)`
+                    x: Math.random()*(LOGICAL_WIDTH-size)+size/2, 
+                    y: Math.random()*(LOGICAL_HEIGHT-150)+50, 
+                    r: 0, maxR: size/2, growing: true, 
+                    color: `hsl(${Math.random()*360}, 80%, 60%)`
                 });
             }
             for (let i = this.items.length - 1; i >= 0; i--) {
                 let item = this.items[i];
                 if (item.growing) {
-                    item.r += 0.5;
-                    if (item.r >= item.maxR) item.growing = false;
+                    item.r += 0.5; if (item.r >= item.maxR) item.growing = false;
                 } else {
-                    item.r -= 0.2;
-                    if (item.r <= 0) this.items.splice(i, 1); // Missed
+                    item.r -= 0.2; if (item.r <= 0) this.items.splice(i, 1);
                 }
             }
         },
         draw() {
-            // Background
-            const grad = ctx.createLinearGradient(0,0,0,LOGICAL_HEIGHT);
-            grad.addColorStop(0, '#222'); grad.addColorStop(1, '#444');
-            ctx.fillStyle = grad; ctx.fillRect(0,0,LOGICAL_WIDTH, LOGICAL_HEIGHT);
+            // Vibrant Gradient Background
+            const grad = ctx.createLinearGradient(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
+            grad.addColorStop(0, '#a18cd1'); grad.addColorStop(1, '#fbc2eb');
+            ctx.fillStyle = grad; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
             
             this.items.forEach(item => {
+                ctx.globalAlpha = 0.8;
                 ctx.fillStyle = item.color;
                 ctx.beginPath(); ctx.arc(item.x, item.y, item.r, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(item.x - item.r*0.3, item.y - item.r*0.3, item.r*0.2, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(item.x - item.r*0.3, item.y - item.r*0.3, item.r*0.3, 0, Math.PI*2); ctx.fill();
             });
+            ctx.globalAlpha = 1.0;
         },
-        tap(x, y) {
+        onInput(type, x, y) {
+            if (type !== 'start') return;
             for (let i = this.items.length - 1; i >= 0; i--) {
                 let item = this.items[i];
                 const dx = x - item.x; const dy = y - item.y;
-                if (dx*dx + dy*dy < item.maxR * item.maxR) { // 관대한 판정
+                if (dx*dx + dy*dy < (item.r + 10)*(item.r + 10)) {
                     this.items.splice(i, 1);
-                    this.score += 100; scoreEl.innerText = this.score;
-                    SoundManager.playPop();
+                    state.score += 100; scoreEl.innerText = state.score;
+                    createParticles(x, y, item.color);
                     return;
                 }
             }
         }
     };
 
-    // 2. Spontaneous Adventure (ZigZag)
-    const adventureGame = {
-        path: [], player: {}, dir: 1, speed: 3, score: 0, camY: 0,
+    // 2. Adventure (ZigZag) - 초기 생성 수정
+    const GameAdventure = {
+        path: [], player: {}, speed: 4, dir: 1, camY: 0,
         init() {
             this.path = [{x: LOGICAL_WIDTH/2, y: LOGICAL_HEIGHT}];
             this.player = {x: LOGICAL_WIDTH/2, y: LOGICAL_HEIGHT - 100};
-            this.dir = 1; this.speed = 3; this.score = 0; this.camY = 0;
+            this.dir = 1; this.speed = 4; this.camY = 0; state.score = 0;
+            // 직선 길 먼저 생성 (안전하게 시작)
+            for(let i=0; i<5; i++) {
+                let last = this.path[this.path.length-1];
+                this.path.push({x: last.x, y: last.y - 20});
+            }
             for(let i=0; i<30; i++) this.addPath();
         },
         addPath() {
             const last = this.path[this.path.length-1];
-            if (Math.random() < 0.1) this.dir *= -1;
+            if (Math.random() < 0.2) this.dir *= -1;
             const nextX = last.x + (this.dir * 20);
             const nextY = last.y - 20;
             this.path.push({x: nextX, y: nextY});
         },
         update() {
-            if((keys.Space || keys.ArrowUp)) { keys.Space=false; this.changeDir(); }
             this.player.x += (this.dir * this.speed * 0.7);
             this.player.y -= (this.speed * 0.7);
             this.camY = this.player.y - (LOGICAL_HEIGHT * 0.7);
             
-            // Path generation & Cleanup
             const last = this.path[this.path.length-1];
             if (this.player.y < last.y + 500) this.addPath();
-            
-            // Collision
+
             let onPath = false;
             for (let i = this.path.length-1; i>=0; i--) {
                 const p = this.path[i];
                 if (p.y > this.player.y + 50) break;
+                if (p.y < this.player.y - 50) continue;
                 const dist = Math.hypot(this.player.x - p.x, this.player.y - p.y);
                 if (dist < 25) { onPath = true; break; }
             }
             if (!onPath) gameOver();
-
-            this.score++;
-            if(this.score%10===0) scoreEl.innerText = Math.floor(this.score/10);
+            state.score++; if (state.frame % 10 === 0) scoreEl.innerText = Math.floor(state.score/10);
         },
         draw() {
-            ctx.fillStyle = '#20B2AA'; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
-            ctx.save(); ctx.translate(0, -this.camY);
+            // Dynamic Background
+            const grad = ctx.createLinearGradient(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
+            grad.addColorStop(0, '#43cea2'); grad.addColorStop(1, '#185a9d');
+            ctx.fillStyle = grad; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
             
-            ctx.strokeStyle = '#fff'; ctx.lineWidth = 40; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+            ctx.save(); ctx.translate(0, -this.camY);
+            ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 40; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
             ctx.beginPath();
-            if(this.path.length) ctx.moveTo(this.path[0].x, this.path[0].y);
+            if (this.path.length > 0) ctx.moveTo(this.path[0].x, this.path[0].y);
             for(let i=1; i<this.path.length; i++) ctx.lineTo(this.path[i].x, this.path[i].y);
             ctx.stroke();
-
-            // Player (Yellow Ball)
+            
+            // Player
             ctx.fillStyle = '#FFD700'; ctx.beginPath(); ctx.arc(this.player.x, this.player.y, 10, 0, Math.PI*2); ctx.fill();
             ctx.restore();
         },
-        changeDir() { this.dir *= -1; SoundManager.playTurn(); }
+        onInput(type) { if (type === 'start') this.dir *= -1; }
     };
 
-    // 3. Our Playlist (Rhythm)
-    const playlistGame = {
-        lanes: [LOGICAL_WIDTH*0.25, LOGICAL_WIDTH*0.5, LOGICAL_WIDTH*0.75],
-        notes: [], score: 0,
-        init() { this.notes = []; this.score = 0; },
+    // 3. Playlist (Rhythm) - UI 및 로직 수정
+    const GamePlaylist = {
+        lanes: [LOGICAL_WIDTH*0.16, LOGICAL_WIDTH*0.5, LOGICAL_WIDTH*0.84],
+        notes: [],
+        init() {
+            this.notes = []; state.score = 0;
+            document.getElementById('rhythm-ui').classList.add('active');
+        },
         update() {
-            if (frame % 40 === 0) {
-                this.notes.push({ lane: Math.floor(Math.random()*3), y: -50 });
+            // Spawn rate
+            if (state.frame % 40 === 0) {
+                this.notes.push({ lane: Math.floor(Math.random()*3), y: -50, hit: false });
             }
             for (let i = this.notes.length - 1; i >= 0; i--) {
                 let n = this.notes[i];
-                n.y += 5;
+                n.y += 6; // Fall speed
                 if (n.y > LOGICAL_HEIGHT + 50) {
                     this.notes.splice(i, 1); // Miss
                 }
             }
         },
         draw() {
-            ctx.fillStyle = '#2c3e50'; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
+            // Disco Background
+            ctx.fillStyle = '#222'; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
+            // Mirror ball effect
+            const time = Date.now() / 1000;
+            ctx.fillStyle = `hsla(${time * 50 % 360}, 70%, 50%, 0.2)`;
+            ctx.beginPath(); ctx.arc(LOGICAL_WIDTH/2, -100, 400, 0, Math.PI*2); ctx.fill();
+
             // Lanes
-            ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth=2;
+            ctx.strokeStyle = 'rgba(255,255,255,0.1)'; ctx.lineWidth=2;
             this.lanes.forEach(x => { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, LOGICAL_HEIGHT); ctx.stroke(); });
             // Hit Line
-            ctx.strokeStyle = '#fff'; ctx.lineWidth=4;
+            ctx.strokeStyle = '#fff'; ctx.lineWidth=3;
             ctx.beginPath(); ctx.moveTo(0, LOGICAL_HEIGHT-100); ctx.lineTo(LOGICAL_WIDTH, LOGICAL_HEIGHT-100); ctx.stroke();
             // Notes
             this.notes.forEach(n => {
+                if(n.hit) return;
                 ctx.fillStyle = ['#ff6b6b', '#feca57', '#48dbfb'][n.lane];
-                ctx.beginPath(); ctx.arc(this.lanes[n.lane], n.y, 20, 0, Math.PI*2); ctx.fill();
-                ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(this.lanes[n.lane], n.y, 8, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(this.lanes[n.lane], n.y, 25, 0, Math.PI*2); ctx.fill();
+                ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(this.lanes[n.lane], n.y, 10, 0, Math.PI*2); ctx.fill();
             });
         },
-        tap(x, y) {
+        onInput(type, x, y, code) {
+            if (type !== 'start' && type !== 'key') return;
             let lane = -1;
-            if (x < LOGICAL_WIDTH/3) lane = 0;
-            else if (x < LOGICAL_WIDTH*2/3) lane = 1;
-            else lane = 2;
+            if (type === 'key') {
+                if (code === 'ArrowLeft') lane = 0; else if (code === 'ArrowDown') lane = 1; else if (code === 'ArrowRight') lane = 2;
+            } else {
+                if (x < LOGICAL_WIDTH/3) lane = 0; else if (x < LOGICAL_WIDTH*2/3) lane = 1; else lane = 2;
+            }
 
-            for (let i = 0; i < this.notes.length; i++) {
-                let n = this.notes[i];
-                if (n.lane === lane && Math.abs(n.y - (LOGICAL_HEIGHT-100)) < 50) {
-                    this.notes.splice(i, 1);
-                    this.score += 100; scoreEl.innerText = this.score;
-                    SoundManager.playBeat();
-                    return;
+            if (lane !== -1) {
+                // UI Feedback
+                const btn = document.getElementById(`lane-${lane}`);
+                if (btn) { btn.classList.add('pressed'); setTimeout(()=>btn.classList.remove('pressed'), 100); }
+                
+                // Hit Check
+                const hitY = LOGICAL_HEIGHT - 100;
+                for (let i = 0; i < this.notes.length; i++) {
+                    let n = this.notes[i];
+                    if (n.lane === lane && !n.hit && Math.abs(n.y - hitY) < 50) {
+                        n.hit = true; state.score += 100; scoreEl.innerText = state.score;
+                        createParticles(this.lanes[lane], hitY, '#fff');
+                        break;
+                    }
                 }
             }
         }
     };
 
-    // 4. High-Five (Dodge)
-    const highfiveGame = {
-        player: {x:0, y:0}, enemies: [], items: [], score: 0,
-        init() { this.player = {x: LOGICAL_WIDTH/2, y: LOGICAL_HEIGHT/2}; this.enemies = []; this.items = []; this.score = 0; },
+    // 4. High-Five (Action) - 드래그 방식 수정
+    const GameHighFive = {
+        player: {x:0, y:0}, enemies: [], friends: [],
+        init() {
+            this.player = {x: LOGICAL_WIDTH/2, y: LOGICAL_HEIGHT/2};
+            this.enemies = []; this.friends = []; state.score = 0; isDragging = false;
+        },
         update() {
-            // Spawn Enemy (Cloud)
-            if (frame % 60 === 0) {
-                const angle = Math.random() * Math.PI * 2;
-                const dist = LOGICAL_WIDTH; 
-                this.enemies.push({
-                    x: this.player.x + Math.cos(angle)*dist, 
-                    y: this.player.y + Math.sin(angle)*dist,
-                    vx: -Math.cos(angle)*2, vy: -Math.sin(angle)*2
-                });
+            if (state.frame % 60 === 0) {
+                const side = Math.floor(Math.random()*4);
+                let ex, ey;
+                if(side===0) { ex=Math.random()*LOGICAL_WIDTH; ey=-50; }
+                else if(side===1) { ex=LOGICAL_WIDTH+50; ey=Math.random()*LOGICAL_HEIGHT; }
+                else if(side===2) { ex=Math.random()*LOGICAL_WIDTH; ey=LOGICAL_HEIGHT+50; }
+                else { ex=-50; ey=Math.random()*LOGICAL_HEIGHT; }
+                const angle = Math.atan2(this.player.y - ey, this.player.x - ex);
+                this.enemies.push({x:ex, y:ey, vx:Math.cos(angle)*2.5, vy:Math.sin(angle)*2.5});
             }
-            // Spawn Item (Heart)
-            if (frame % 100 === 0) {
-                this.items.push({x: Math.random()*(LOGICAL_WIDTH-40)+20, y: Math.random()*(LOGICAL_HEIGHT-40)+20});
+            if (state.frame % 80 === 0) {
+                this.friends.push({ x: Math.random()*(LOGICAL_WIDTH-40)+20, y: Math.random()*(LOGICAL_HEIGHT-40)+20, life: 200 });
             }
-
-            // Move & Collide
             this.enemies.forEach(e => {
                 e.x += e.vx; e.y += e.vy;
                 if (Math.hypot(e.x - this.player.x, e.y - this.player.y) < 25) gameOver();
             });
-            for (let i = this.items.length - 1; i >= 0; i--) {
-                let item = this.items[i];
-                if (Math.hypot(item.x - this.player.x, item.y - this.player.y) < 30) {
-                    this.items.splice(i, 1);
-                    this.score += 500; scoreEl.innerText = this.score;
-                    SoundManager.playScore();
+            for(let i=this.friends.length-1; i>=0; i--) {
+                let f = this.friends[i]; f.life--;
+                if(f.life <= 0) this.friends.splice(i, 1);
+                else if(Math.hypot(f.x - this.player.x, f.y - this.player.y) < 30) {
+                    this.friends.splice(i, 1); state.score += 500; scoreEl.innerText = state.score;
+                    createParticles(this.player.x, this.player.y, '#FF1493');
                 }
             }
         },
         draw() {
-            ctx.fillStyle = '#87CEEB'; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
+            // Sky Background
+            const grad = ctx.createLinearGradient(0,0,0,LOGICAL_HEIGHT);
+            grad.addColorStop(0, '#89f7fe'); grad.addColorStop(1, '#66a6ff');
+            ctx.fillStyle = grad; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
+
             // Player
             ctx.fillStyle = '#FFD700'; ctx.beginPath(); ctx.arc(this.player.x, this.player.y, 15, 0, Math.PI*2); ctx.fill();
-            // Enemy
-            ctx.fillStyle = '#4682B4'; 
-            this.enemies.forEach(e => { ctx.beginPath(); ctx.arc(e.x, e.y, 15, 0, Math.PI*2); ctx.fill(); });
-            // Item
+            // Smile
+            ctx.strokeStyle = '#333'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(this.player.x, this.player.y+2, 8, 0.1*Math.PI, 0.9*Math.PI); ctx.stroke();
+
+            // Enemies (Gloomy Clouds)
+            ctx.fillStyle = '#5D6D7E';
+            this.enemies.forEach(e => {
+                ctx.beginPath(); ctx.arc(e.x, e.y, 15, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(e.x-10, e.y+5, 12, 0, Math.PI*2); ctx.fill();
+                ctx.beginPath(); ctx.arc(e.x+10, e.y+5, 12, 0, Math.PI*2); ctx.fill();
+            });
+            // Friends (Hearts)
             ctx.fillStyle = '#FF1493';
-            this.items.forEach(i => { ctx.beginPath(); ctx.arc(i.x, i.y, 10, 0, Math.PI*2); ctx.fill(); });
+            this.friends.forEach(f => {
+                ctx.beginPath(); ctx.arc(f.x, f.y, 10, 0, Math.PI*2); ctx.fill();
+            });
         },
-        move(x, y) {
-            // Smooth follow
-            this.player.x += (x - this.player.x) * 0.2;
-            this.player.y += (y - this.player.y) * 0.2;
+        onInput(type, x, y) {
+            // 드래그 로직: start에서 드래그 시작, move에서 이동, end에서 종료
+            if (type === 'start') isDragging = true;
+            if (type === 'end') isDragging = false;
+            if (type === 'move' && isDragging) {
+                this.player.x += (x - this.player.x) * 0.2;
+                this.player.y += (y - this.player.y) * 0.2;
+            }
         }
     };
 
     // 5. Rainbow Paint (Snake)
-    const rainbowGame = {
-        snake: [], dir: {x:1, y:0}, food: {}, score: 0, cellSize: 20,
-        cols: 18, rows: 32,
+    const GameRainbow = {
+        snake: [], dir: {x:1, y:0}, food: {}, cellSize: 20, cols:18, rows:32,
         init() {
-            this.snake = [{x:9, y:16}, {x:8, y:16}, {x:7, y:16}];
-            this.dir = {x:1, y:0};
-            this.score = 0;
-            this.spawnFood();
+            this.snake = [{x:9, y:16}, {x:8, y:16}, {x:7, y:16}]; this.dir = {x:1, y:0};
+            state.score = 0; this.spawnFood();
         },
         spawnFood() {
             this.food = {x: Math.floor(Math.random()*this.cols), y: Math.floor(Math.random()*this.rows), color: `hsl(${Math.random()*360}, 100%, 50%)`};
         },
         update() {
-            if (frame % 10 !== 0) return;
+            if (state.frame % 8 !== 0) return;
             const head = {x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y};
-            // Wall Collision
             if (head.x < 0 || head.x >= this.cols || head.y < 0 || head.y >= this.rows) return gameOver();
-            // Self Collision
             for(let p of this.snake) if(head.x===p.x && head.y===p.y) return gameOver();
-            
             this.snake.unshift(head);
             if (head.x === this.food.x && head.y === this.food.y) {
-                this.score += 100; scoreEl.innerText = this.score;
-                SoundManager.playScore();
-                this.spawnFood();
-            } else {
-                this.snake.pop();
-            }
+                state.score += 100; scoreEl.innerText = state.score; this.spawnFood();
+            } else { this.snake.pop(); }
         },
         draw() {
-            ctx.fillStyle = '#f0f0f0'; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
-            // Food
-            ctx.fillStyle = this.food.color;
-            ctx.fillRect(this.food.x*this.cellSize, this.food.y*this.cellSize, this.cellSize-2, this.cellSize-2);
-            // Snake
+            ctx.fillStyle = '#fff'; ctx.fillRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
+            // Grid texture
+            ctx.strokeStyle = '#eee'; ctx.lineWidth=1;
+            for(let i=0; i<=this.cols; i++) { ctx.beginPath(); ctx.moveTo(i*this.cellSize,0); ctx.lineTo(i*this.cellSize, LOGICAL_HEIGHT); ctx.stroke(); }
+            for(let i=0; i<=this.rows; i++) { ctx.beginPath(); ctx.moveTo(0,i*this.cellSize); ctx.lineTo(LOGICAL_WIDTH, i*this.cellSize); ctx.stroke(); }
+
+            ctx.fillStyle = this.food.color; ctx.fillRect(this.food.x*this.cellSize, this.food.y*this.cellSize, this.cellSize-2, this.cellSize-2);
             this.snake.forEach((p, i) => {
-                ctx.fillStyle = `hsl(${(i*20)%360}, 80%, 60%)`;
+                ctx.fillStyle = `hsl(${(i*10)%360}, 80%, 60%)`;
                 ctx.fillRect(p.x*this.cellSize, p.y*this.cellSize, this.cellSize-2, this.cellSize-2);
             });
         },
-        input(dir) {
-            if (dir === 'left' && this.dir.x === 0) this.dir = {x:-1, y:0};
-            if (dir === 'right' && this.dir.x === 0) this.dir = {x:1, y:0};
-            if (dir === 'up' && this.dir.y === 0) this.dir = {x:0, y:-1};
-            if (dir === 'down' && this.dir.y === 0) this.dir = {x:0, y:1};
+        onInput(type, x, y, code) {
+            // Swipe & Key
+            let d = '';
+            if (type === 'key') d = code.replace('Arrow','').toLowerCase();
+            if (type === 'swipe') d = code;
+            
+            if (d === 'left' && this.dir.x === 0) this.dir = {x:-1, y:0};
+            if (d === 'right' && this.dir.x === 0) this.dir = {x:1, y:0};
+            if (d === 'up' && this.dir.y === 0) this.dir = {x:0, y:-1};
+            if (d === 'down' && this.dir.y === 0) this.dir = {x:0, y:1};
         }
     };
 
-    // --- Main System ---
+    // --- Common & System ---
+    let particles = [];
+    function createParticles(x, y, color) {
+        for(let i=0; i<8; i++) particles.push({x, y, vx:(Math.random()-0.5)*8, vy:(Math.random()-0.5)*8, life:1.0, color});
+    }
+    function getGameModule() {
+        if (state.mode === 'sparkle') return GameSparkle;
+        if (state.mode === 'adventure') return GameAdventure;
+        if (state.mode === 'playlist') return GamePlaylist;
+        if (state.mode === 'highfive') return GameHighFive;
+        if (state.mode === 'rainbow') return GameRainbow;
+    }
 
-    // Input Routing
-    let startX, startY;
-    gameWrapper.addEventListener('touchstart', e => {
-        if(e.target.tagName === 'BUTTON') return;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
+    // --- Unified Input Handler (Mouse + Touch) ---
+    function handleStart(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+        e.preventDefault(); // Stop default touch actions
         
-        if(isPlaying) {
-            const rect = gameStage.getBoundingClientRect();
-            const x = (e.touches[0].clientX - rect.left) / scaleRatio;
-            const y = (e.touches[0].clientY - rect.top) / scaleRatio;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const rect = stage.getBoundingClientRect();
+        const x = (clientX - rect.left) / scaleRatio;
+        const y = (clientY - rect.top) / scaleRatio;
 
-            if (currentGameMode === 'sparkle') sparkleGame.tap(x, y);
-            if (currentGameMode === 'adventure') adventureGame.changeDir();
-            if (currentGameMode === 'playlist') playlistGame.tap(x, y);
-        }
-        e.preventDefault();
-    }, {passive: false});
+        if (state.isPlaying) getGameModule().onInput('start', x, y);
 
-    gameWrapper.addEventListener('touchmove', e => {
-        if(isPlaying && currentGameMode === 'highfive') {
-            const rect = gameStage.getBoundingClientRect();
-            const x = (e.touches[0].clientX - rect.left) / scaleRatio;
-            const y = (e.touches[0].clientY - rect.top) / scaleRatio;
-            highfiveGame.move(x, y);
-            e.preventDefault();
-        }
-        if(currentGameMode === 'rainbow') e.preventDefault();
-    }, {passive: false});
+        // Swipe Start
+        startX = clientX; startY = clientY;
+    }
 
-    gameWrapper.addEventListener('touchend', e => {
+    function handleMove(e) {
+        e.preventDefault(); // Stop scrolling
+        if (!state.isPlaying) return;
+
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const rect = stage.getBoundingClientRect();
+        const x = (clientX - rect.left) / scaleRatio;
+        const y = (clientY - rect.top) / scaleRatio;
+
+        getGameModule().onInput('move', x, y);
+    }
+
+    let startX, startY;
+    function handleEnd(e) {
+        if (!state.isPlaying) return;
+        getGameModule().onInput('end');
+        isDragging = false;
+
+        // Swipe Detection
         if (!startX || !startY) return;
-        const endX = e.changedTouches[0].clientX;
-        const endY = e.changedTouches[0].clientY;
-        const dx = endX - startX;
-        const dy = endY - startY;
+        const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+        const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+        const dx = clientX - startX; const dy = clientY - startY;
         
         if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
             let dir = '';
             if (Math.abs(dx) > Math.abs(dy)) dir = dx > 0 ? 'right' : 'left';
             else dir = dy > 0 ? 'down' : 'up';
-            if (currentGameMode === 'rainbow') rainbowGame.input(dir);
+            getGameModule().onInput('swipe', 0, 0, dir);
         }
         startX = null; startY = null;
-    });
+    }
 
-    // Keyboard (PC)
+    // Register Listeners on Wrapper (covers whole game area)
+    wrapper.addEventListener('mousedown', handleStart);
+    wrapper.addEventListener('mousemove', handleMove);
+    wrapper.addEventListener('mouseup', handleEnd);
+    wrapper.addEventListener('touchstart', handleStart, {passive: false});
+    wrapper.addEventListener('touchmove', handleMove, {passive: false});
+    wrapper.addEventListener('touchend', handleEnd);
+
     window.addEventListener('keydown', e => {
-        if(e.code === 'Space' && isPlaying && currentGameMode === 'adventure') adventureGame.changeDir();
-        if(currentGameMode === 'playlist' && isPlaying) {
-            if(e.code==='ArrowLeft') playlistGame.tap(50, 0);
-            if(e.code==='ArrowDown') playlistGame.tap(LOGICAL_WIDTH/2, 0);
-            if(e.code==='ArrowRight') playlistGame.tap(LOGICAL_WIDTH-50, 0);
-        }
-        if(currentGameMode === 'rainbow' && isPlaying) {
-             if(e.code==='ArrowLeft') rainbowGame.input('left');
-             if(e.code==='ArrowRight') rainbowGame.input('right');
-             if(e.code==='ArrowUp') rainbowGame.input('up');
-             if(e.code==='ArrowDown') rainbowGame.input('down');
+        if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) {
+            e.preventDefault();
+            if (state.isPlaying) getGameModule().onInput('key', 0, 0, e.code);
+            else if (e.code === 'Space' && !document.getElementById('start-screen').classList.contains('hidden')) startGame();
         }
     });
 
-    function switchGame(mode) {
-        resize();
-        currentGameMode = mode; isPlaying = false; if(gameLoopId) cancelAnimationFrame(gameLoopId);
-        
-        startScreen.classList.remove('hidden'); gameOverScreen.classList.add('hidden');
-        navBtns.forEach(btn => btn.classList.remove('active'));
-        
-        const btn = document.querySelector(`.nav-btn[onclick*="${mode}"]`);
-        if(btn) btn.classList.add('active');
+    // Game Loop
+    function loop() {
+        if (!state.isPlaying) return;
+        state.frame++;
+        ctx.clearRect(0,0,LOGICAL_WIDTH,LOGICAL_HEIGHT);
 
-        window.location.hash = mode;
-        Object.values(contents).forEach(el => el.classList.remove('active-content'));
-        if(contents[mode]) contents[mode].classList.add('active-content');
+        const game = getGameModule();
+        game.update();
+        game.draw();
 
-        // Set Title & Tip
-        if(mode === 'sparkle') {
-            titleText.innerHTML = "Sparkling<br>Vibe"; descText.innerHTML = "반짝이는 아이디어를 모으세요!<br>터치로 팝!";
-            gameTipText.innerText = "💡 Tip: 보석이 사라지기 전에 터치!";
-            sparkleGame.init(); sparkleGame.draw();
-        } else if (mode === 'adventure') {
-            titleText.innerHTML = "Spontaneous<br>Adventure"; descText.innerHTML = "지그재그 길을 달리세요!<br>터치하여 방향 전환";
-            gameTipText.innerText = "💡 Tip: 떨어지지 않게 타이밍 맞춰 터치";
-            adventureGame.init(); adventureGame.draw();
-        } else if (mode === 'playlist') {
-            titleText.innerHTML = "Our<br>Playlist"; descText.innerHTML = "리듬에 맞춰 노트를 누르세요!<br>3라인 터치";
-            gameTipText.innerText = "💡 Tip: 판정선에 닿을 때 해당 라인 터치";
-            playlistGame.init(); playlistGame.draw();
-        } else if (mode === 'highfive') {
-            titleText.innerHTML = "Shake Off<br>the Blues"; descText.innerHTML = "우울함을 피해 하트 수집!<br>드래그하여 이동";
-            gameTipText.innerText = "💡 Tip: 손가락으로 캐릭터를 움직여 피하세요";
-            highfiveGame.init(); highfiveGame.draw();
-        } else if (mode === 'rainbow') {
-            titleText.innerHTML = "Rainbow<br>Paint"; descText.innerHTML = "꼬리가 길어지는 무지개 뱀!<br>스와이프로 이동";
-            gameTipText.innerText = "💡 Tip: 벽이나 자기 몸에 닿으면 게임 오버";
-            rainbowGame.init(); rainbowGame.draw();
+        // Particles
+        for(let i=particles.length-1; i>=0; i--) {
+            let p = particles[i]; p.x+=p.vx; p.y+=p.vy; p.life-=0.05;
+            if(p.life<=0) { particles.splice(i,1); continue; }
+            ctx.globalAlpha=p.life; ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI*2); ctx.fill();
         }
-        stopBgm();
+        ctx.globalAlpha=1.0;
+
+        state.loopId = requestAnimationFrame(loop);
+    }
+
+    // Utils
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) wrapper.requestFullscreen().catch(e=>{});
+        else document.exitFullscreen();
+    }
+    function openMusicLink() {
+        if (youtubeVideoIds[state.mode]) window.open(`https://www.youtube.com/watch?v=${youtubeVideoIds[state.mode]}`, '_blank');
+    }
+    
+    function setGame(mode) {
+        state.mode = mode;
+        document.querySelectorAll('.nav-btn').forEach(b => {
+            b.classList.remove('active');
+            if(b.getAttribute('onclick').includes(mode)) b.classList.add('active');
+        });
+        
+        const info = {
+            sparkle: {t:'Sparkling Vibe', d:'반짝이는 영감을 터치하세요!', tip:'Tip: 보석이 사라지기 전에 터치!'},
+            adventure: {t:'Spontaneous Adventure', d:'지그재그 길을 달리세요!', tip:'Tip: 탭/클릭하여 방향 전환'},
+            playlist: {t:'Our Playlist', d:'리듬에 맞춰 노트를 누르세요!', tip:'Tip: 3개의 라인을 터치하세요'},
+            highfive: {t:'Shake Off!', d:'우울함은 피하고 하트를 잡으세요!', tip:'Tip: 화면을 누른채 드래그하세요'},
+            rainbow: {t:'Rainbow Paint', d:'화면을 밀어 색깔을 모으세요!', tip:'Tip: 스와이프/방향키로 이동'}
+        };
+        
+        document.getElementById('title').innerText = info[mode].t.replace(' ', '\n');
+        document.getElementById('desc').innerText = info[mode].d;
+        document.getElementById('tip').innerText = info[mode].tip;
+        
+        // UI Reset
+        document.getElementById('rhythm-ui').classList.remove('active');
+        document.getElementById('start-screen').classList.remove('hidden');
+        document.getElementById('game-over-screen').classList.add('hidden');
+        document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active-content'));
+        document.getElementById(`content-${mode}`).classList.add('active-content');
+        
+        state.isPlaying = false; cancelAnimationFrame(state.loopId);
+        
+        if(ytPlayer && ytPlayer.loadVideoById) ytPlayer.loadVideoById(bgmIds[mode]);
     }
 
     function startGame() {
-        SoundManager.init(); playBgm();
-        startScreen.classList.add('hidden'); gameOverScreen.classList.add('hidden');
-        scoreEl.innerText = "SCORE: 0";
-        isPlaying = true; frame = 0;
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game-over-screen').classList.add('hidden');
+        state.isPlaying = true; state.frame = 0; particles = [];
         
-        if(currentGameMode === 'sparkle') sparkleGame.init();
-        else if(currentGameMode === 'adventure') adventureGame.init();
-        else if(currentGameMode === 'playlist') playlistGame.init();
-        else if(currentGameMode === 'highfive') highfiveGame.init();
-        else if(currentGameMode === 'rainbow') rainbowGame.init();
+        getGameModule().init();
+        if(state.mode === 'playlist') document.getElementById('rhythm-ui').classList.add('active');
         
         loop();
     }
 
     function gameOver() {
-        SoundManager.playGameOver(); stopBgm();
-        isPlaying = false; gameOverScreen.classList.remove('hidden');
-        
-        let finalScore = 0;
-        if(currentGameMode === 'sparkle') finalScore = sparkleGame.score;
-        else if(currentGameMode === 'adventure') finalScore = Math.floor(adventureGame.score/10);
-        else if(currentGameMode === 'playlist') finalScore = playlistGame.score;
-        else if(currentGameMode === 'highfive') finalScore = highfiveGame.score;
-        else if(currentGameMode === 'rainbow') finalScore = rainbowGame.score;
-        
-        finalScoreEl.innerText = `SCORE: ${finalScore}`;
+        state.isPlaying = false;
+        document.getElementById('game-over-screen').classList.remove('hidden');
+        document.getElementById('final-score').innerText = `SCORE: ${Math.floor(state.score)}`;
     }
 
-    function loop() {
-        if(!isPlaying) return;
-        ctx.clearRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
-        frame++;
-        
-        if(currentGameMode === 'sparkle') { sparkleGame.update(); sparkleGame.draw(); }
-        else if(currentGameMode === 'adventure') { adventureGame.update(); adventureGame.draw(); }
-        else if(currentGameMode === 'playlist') { playlistGame.update(); playlistGame.draw(); }
-        else if(currentGameMode === 'highfive') { highfiveGame.update(); highfiveGame.draw(); }
-        else if(currentGameMode === 'rainbow') { rainbowGame.update(); rainbowGame.draw(); }
-        
-        gameLoopId = requestAnimationFrame(loop);
+    // Init
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    function onYouTubeIframeAPIReady() {
+        ytPlayer = new YT.Player('youtube-player', {
+            height: '1', width: '1', videoId: bgmIds.sparkle,
+            playerVars: { 'autoplay': 0, 'loop': 1, 'playlist': bgmIds.sparkle },
+            events: { 'onReady': (e)=>e.target.setVolume(30) }
+        });
     }
 
-    function shareScore() {
-        // Share logic same as before
-        const shareUrl = window.location.href;
-        const tempInput = document.createElement("input"); tempInput.value = shareUrl; document.body.appendChild(tempInput); tempInput.select(); document.execCommand("copy"); document.body.removeChild(tempInput); alert("링크가 복사되었습니다!"); 
-    }
-
-    window.onload = function() { 
-        resize(); 
-        const hash = window.location.hash.replace('#', '');
-        const validModes = ['sparkle', 'adventure', 'playlist', 'highfive', 'rainbow'];
-        if (validModes.includes(hash)) switchGame(hash);
-        else switchGame('sparkle'); 
-    };
+    window.onload = function() { resize(); };
 </script>
 </body>
 </html>
