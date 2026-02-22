@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ENFP — enfp.kr</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Caveat:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style type="text/tailwindcss">
+    @theme {
+      /* Spark — warm amber-orange core */
+      --color-spark-100: #fff3e0;
+      --color-spark-200: #ffe0b2;
+      --color-spark-300: #ffcc80;
+      --color-spark-400: #ffa726;
+      --color-spark-500: #f57c00;
+      --color-spark-600: #e65100;
+
+      /* Bloom — coral-rose connection */
+      --color-bloom-200: #ffcdd2;
+      --color-bloom-300: #ef9a9a;
+      --color-bloom-400: #e57373;
+      --color-bloom-500: #f44336;
+
+      /* Sky — possibility blue */
+      --color-sky-200:  #b3e5fc;
+      --color-sky-300:  #81d4fa;
+      --color-sky-400:  #29b6f6;
+      --color-sky-500:  #0288d1;
+
+      /* Lime — fresh new ideas */
+      --color-lime-300: #e6ee9c;
+      --color-lime-400: #d4e157;
+      --color-lime-500: #afb42b;
+
+      /* Violet — depth beneath the spark */
+      --color-violet-300: #ce93d8;
+      --color-violet-400: #ab47bc;
+      --color-violet-500: #7b1fa2;
+
+      /* Night — background canvas */
+      --color-night-900: #0e0a14;
+      --color-night-950: #07050d;
+
+      --font-display: "Fraunces", Georgia, serif;
+      --font-hand:    "Caveat", cursive;
+      --font-body:    "Plus Jakarta Sans", system-ui, sans-serif;
+    }
+
+    @layer base {
+      *, *::before, *::after { box-sizing: border-box; }
+      html {
+        scroll-behavior: smooth;
+        background-color: var(--color-night-950);
+        color: #f0eaf8;
+      }
+      body {
+        font-family: var(--font-body);
+        font-weight: 300;
+        overflow-x: hidden;
+      }
+      ::selection {
+        background-color: var(--color-spark-400);
+        color: var(--color-night-950);
+      }
+      ::-webkit-scrollbar { width: 3px; }
+      ::-webkit-scrollbar-track { background: var(--color-night-950); }
+      ::-webkit-scrollbar-thumb { background: rgba(255, 167, 38, 0.45); }
+    }
+
+    /* ── Canvas ── */
+    #spark-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+    }
+
+    /* Aurora background — soft rainbow wash */
+    .aurora-layer {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 30%,  rgba(255,167,38, 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 50% at 80% 70%,  rgba(41,182,246, 0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(206,147,216,0.05) 0%, transparent 70%);
+      animation: aurora-drift 14s ease-in-out infinite alternate;
+    }
+    @keyframes aurora-drift {
+      0%   { opacity: 0.7; transform: scale(1)    rotate(0deg); }
+      50%  { opacity: 1;   transform: scale(1.04) rotate(0.5deg); }
+      100% { opacity: 0.8; transform: scale(0.98) rotate(-0.5deg); }
+    }
+
+    .vignette {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(7,5,13,0.82) 100%);
+    }
+
+    /* ── Site Wrapper ── */
+    .site-wrapper {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .glass-header {
+      position: sticky; top: 0;
+      backdrop-filter: blur(20px) saturate(1.6);
+      background: rgba(7, 5, 13, 0.72);
+      border-bottom: 1px solid rgba(255, 167, 38, 0.12);
+      z-index: 100;
+    }
+
+    .logo-enfp {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      background: linear-gradient(135deg,
+        var(--color-spark-400) 0%,
+        var(--color-bloom-400) 35%,
+        var(--color-violet-300) 65%,
+        var(--color-sky-400) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: logo-hue 8s linear infinite;
+      background-size: 200% 200%;
+    }
+    @keyframes logo-hue {
+      0%   { background-position: 0%   50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0%   50%; }
+    }
+
+    .nav-link {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240, 234, 248, 0.55);
+      text-decoration: none;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, var(--color-spark-400), var(--color-bloom-400));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .nav-link:hover { color: rgba(240,234,248,0.95); }
+    .nav-link:hover::after { transform: scaleX(1); }
+
+    .domain-badge {
+      font-family: var(--font-body);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      color: rgba(255,167,38,0.55);
+      border: 1px solid rgba(255,167,38,0.2);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── Hero ── */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Giant rainbow ghost text */
+    .hero-bg-text {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-display);
+      font-size: clamp(18vw, 28vw, 38vw);
+      font-weight: 900;
+      font-style: italic;
+      line-height: 1;
+      color: transparent;
+      background: linear-gradient(135deg,
+        rgba(255,167,38,0.08),
+        rgba(244,67,54,0.06),
+        rgba(171,71,188,0.06),
+        rgba(41,182,246,0.08));
+      -webkit-background-clip: text;
+      background-clip: text;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+      letter-spacing: 0.06em;
+    }
+
+    /* Radial burst behind logo */
+    .hero-burst {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: min(600px, 90vw);
+      height: min(600px, 90vw);
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(255,167,38,0.06) 0%,
+        rgba(244,67,54,0.04) 30%,
+        rgba(171,71,188,0.03) 60%,
+        transparent 70%);
+      animation: burst-pulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes burst-pulse {
+      0%, 100% { transform: translate(-50%,-50%) scale(1);    opacity: 0.8; }
+      50%       { transform: translate(-50%,-50%) scale(1.12); opacity: 1; }
+    }
+
+    .campaigner-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 0.63rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-spark-300);
+      border: 1px solid rgba(255,167,38,0.35);
+      padding: 5px 16px;
+      border-radius: 2px;
+      margin-bottom: 2.5rem;
+    }
+    .campaigner-badge::before {
+      content: '✦';
+      font-size: 0.65rem;
+      animation: star-spin 3s linear infinite;
+    }
+    @keyframes star-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .logo-display {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 15vw, 13rem);
+      font-weight: 900;
+      font-style: italic;
+      line-height: 1;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg,
+        var(--color-spark-400)   0%,
+        var(--color-bloom-400)   30%,
+        var(--color-violet-300)  65%,
+        var(--color-sky-400)    100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 200%;
+      animation: logo-hue 8s linear infinite, burst-in 1s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes burst-in {
+      from { opacity: 0; transform: scale(0.88) rotate(-2deg); }
+      to   { opacity: 1; transform: scale(1)    rotate(0deg); }
+    }
+
+    .hero-tagline {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1rem, 2.5vw, 1.55rem);
+      font-weight: 300;
+      color: rgba(240,234,248,0.75);
+      letter-spacing: 0.04em;
+      margin-top: 1.6rem;
+      animation: fade-up 1s 0.3s both;
+    }
+
+    /* Handwritten accent */
+    .hand-accent {
+      font-family: var(--font-hand);
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      color: var(--color-spark-300);
+      margin-top: 0.5rem;
+      animation: fade-up 1s 0.45s both;
+      display: block;
+    }
+
+    .divider-spark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 2rem auto;
+      animation: fade-up 1s 0.5s both;
+    }
+    .spark-line {
+      width: 50px; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,167,38,0.4));
+    }
+    .spark-line.right {
+      background: linear-gradient(90deg, rgba(255,167,38,0.4), transparent);
+    }
+    .spark-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--color-spark-400);
+      box-shadow: 0 0 6px var(--color-spark-400);
+    }
+
+    .hero-quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(0.88rem, 1.8vw, 1.08rem);
+      font-weight: 300;
+      color: rgba(240,234,248,0.45);
+      max-width: 460px;
+      line-height: 1.9;
+      animation: fade-up 1s 0.6s both;
+    }
+
+    .trait-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-body);
+      font-size: 0.63rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 5px 13px;
+      border-radius: 2px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(240,234,248,0.6);
+      transition: all 0.25s;
+      cursor: default;
+    }
+    .trait-pill:hover {
+      color: rgba(240,234,248,0.95);
+      border-color: rgba(255,167,38,0.5);
+      background: rgba(255,167,38,0.08);
+      transform: translateY(-2px);
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--color-night-950);
+      background: linear-gradient(135deg,
+        var(--color-spark-400),
+        var(--color-bloom-400));
+      padding: 15px 40px;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .cta-btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg,
+        var(--color-bloom-400),
+        var(--color-violet-400));
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .cta-btn:hover::after { opacity: 1; }
+    .cta-btn span { position: relative; z-index: 1; }
+    .cta-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 35px rgba(255,107,38,0.35);
+    }
+
+    .scroll-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4.5rem;
+      animation: fade-up 1s 1.2s both;
+    }
+    .scroll-label {
+      font-family: var(--font-body);
+      font-size: 0.57rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(240,234,248,0.25);
+    }
+    .scroll-line {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, var(--color-spark-500), transparent);
+      animation: scroll-fall 2.2s ease-in-out infinite;
+    }
+    @keyframes scroll-fall {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ── Stats Row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top:    1px solid rgba(255,167,38,0.08);
+      border-bottom: 1px solid rgba(255,167,38,0.08);
+    }
+    .stat-cell {
+      padding: 2.8rem 2rem;
+      text-align: center;
+      border-right: 1px solid rgba(255,167,38,0.08);
+      transition: background 0.3s;
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-cell:hover { background: rgba(255,167,38,0.04); }
+    .stat-number {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg,
+        var(--color-spark-400),
+        var(--color-bloom-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(240,234,248,0.3);
+      margin-top: 7px;
+    }
+
+    /* ── Letter Blocks ── */
+    .letters-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255,167,38,0.08);
+    }
+    .letter-block {
+      padding: 3.5rem 1.5rem;
+      border-right: 1px solid rgba(255,167,38,0.08);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .letter-block:last-child { border-right: none; }
+    .letter-block:hover { background: rgba(255,255,255,0.02); }
+
+    /* Radial glow on hover */
+    .letter-block::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.5s ease;
+      pointer-events: none;
+    }
+    .letter-block:hover::before { transform: translate(-50%, -50%) scale(1.4); }
+
+    .l-e::before { background: radial-gradient(circle, rgba(255,167,38,0.12), transparent 70%); }
+    .l-n::before { background: radial-gradient(circle, rgba(41,182,246,0.12), transparent 70%); }
+    .l-f::before { background: radial-gradient(circle, rgba(244,67,54,0.12), transparent 70%); }
+    .l-p::before { background: radial-gradient(circle, rgba(171,71,188,0.12), transparent 70%); }
+
+    .letter-char {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 900;
+      font-size: clamp(3.5rem, 8vw, 6.5rem);
+      line-height: 1;
+      position: relative; z-index: 1;
+    }
+    .l-e .letter-char { color: var(--color-spark-400); }
+    .l-n .letter-char { color: var(--color-sky-400); }
+    .l-f .letter-char { color: var(--color-bloom-400); }
+    .l-p .letter-char { color: var(--color-violet-300); }
+
+    .letter-word {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(240,234,248,0.3);
+      margin-top: 7px;
+      position: relative; z-index: 1;
+    }
+    .letter-desc {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 0.85rem;
+      color: rgba(240,234,248,0.45);
+      margin-top: 9px;
+      line-height: 1.6;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Section Shared ── */
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--color-spark-500);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-weight: 900;
+      color: rgba(240,234,248,0.95);
+      line-height: 1.15;
+    }
+
+    /* ── Spark Cards (Feature) ── */
+    .spark-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1px;
+      background: rgba(255,167,38,0.06);
+    }
+    .spark-card {
+      background: var(--color-night-950);
+      padding: 3rem 2.6rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .spark-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .spark-card:hover::before { opacity: 1; }
+    .spark-card:hover { background: rgba(255,255,255,0.015); }
+
+    .card-spark::before  { background: radial-gradient(circle at top left, rgba(255,167,38,0.08), transparent 60%); }
+    .card-bloom::before  { background: radial-gradient(circle at top left, rgba(244,67,54,0.08), transparent 60%); }
+    .card-violet::before { background: radial-gradient(circle at top left, rgba(171,71,188,0.08), transparent 60%); }
+
+    .card-num {
+      font-family: var(--font-hand);
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      display: block;
+      line-height: 1;
+    }
+    .card-spark  .card-num  { color: rgba(255,167,38,0.35); }
+    .card-bloom  .card-num  { color: rgba(244, 67,54,0.35); }
+    .card-violet .card-num  { color: rgba(171, 71,188,0.35); }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1.4rem;
+      display: block;
+      position: relative; z-index: 1;
+    }
+    .card-title {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: 1.7rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+      position: relative; z-index: 1;
+    }
+    .card-spark  .card-title { color: var(--color-spark-300); }
+    .card-bloom  .card-title { color: var(--color-bloom-300); }
+    .card-violet .card-title { color: var(--color-violet-300); }
+
+    .card-desc {
+      font-family: var(--font-body);
+      font-size: 0.87rem;
+      line-height: 1.8;
+      color: rgba(240,234,248,0.45);
+      font-weight: 300;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Ideas Box ── */
+    .ideas-box {
+      border: 1px solid rgba(255,167,38,0.15);
+      padding: 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .ideas-box::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(255,167,38,0.06), transparent 70%);
+      pointer-events: none;
+    }
+    .ideas-box-label {
+      position: absolute; top: -0.65rem; left: 2.5rem;
+      font-family: var(--font-body);
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--color-spark-500);
+      background: var(--color-night-950);
+      padding: 0 8px;
+    }
+
+    .idea-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.3rem 0;
+      border-bottom: 1px solid rgba(255,167,38,0.06);
+    }
+    .idea-row:last-child { border-bottom: none; }
+
+    .idea-icon {
+      font-size: 1.5rem;
+      min-width: 2.5rem;
+      padding-top: 2px;
+      text-align: center;
+    }
+    .idea-name {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(240,234,248,0.75);
+      margin-bottom: 4px;
+    }
+    .idea-text {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: rgba(240,234,248,0.38);
+      font-weight: 300;
+    }
+
+    /* ── Origin ── */
+    .origin-text {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(0.92rem, 1.9vw, 1.1rem);
+      line-height: 2;
+      color: rgba(240,234,248,0.45);
+      font-weight: 300;
+    }
+    .origin-text em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--color-spark-400), var(--color-bloom-400));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── Contact ── */
+    .contact-link {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(1.3rem, 3.2vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      background: linear-gradient(135deg,
+        var(--color-spark-400),
+        var(--color-bloom-400),
+        var(--color-violet-300));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200%;
+      transition: background-position 0.5s;
+    }
+    .contact-link:hover { background-position: 100%; }
+
+    /* ── Footer ── */
+    .site-footer {
+      padding: 2.5rem 3rem;
+      border-top: 1px solid rgba(255,167,38,0.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-copy {
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: rgba(240,234,248,0.2);
+    }
+
+    /* ── Animations ── */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up  { animation: fade-up 0.9s ease both; }
+    .delay-1  { animation-delay: 0.1s; }
+    .delay-2  { animation-delay: 0.25s; }
+    .delay-3  { animation-delay: 0.4s; }
+    .delay-4  { animation-delay: 0.55s; }
+    .delay-5  { animation-delay: 0.7s; }
+    .delay-6  { animation-delay: 0.9s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .letters-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-row    { grid-template-columns: repeat(3, 1fr); }
+      .ideas-box    { padding: 2rem 1.5rem; }
+      .site-footer  { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="spark-canvas"></canvas>
+  <div class="aurora-layer"  aria-hidden="true"></div>
+  <div class="vignette"      aria-hidden="true"></div>
+
+  <div class="site-wrapper">
+
+    <!-- ══════════════ HEADER ══════════════ -->
+    <header class="glass-header flex items-center justify-between px-8 py-5">
+      <a href="/" class="logo-enfp">ENFP</a>
+      <nav class="hidden sm:flex gap-10">
+        <a href="#letters"  class="nav-link">Letters</a>
+        <a href="#spark"    class="nav-link">Spark</a>
+        <a href="#contact"  class="nav-link">Contact</a>
+      </nav>
+      <div class="domain-badge hidden sm:block">enfp.kr</div>
+    </header>
+
+    <main>
+
+      <!-- ══════════════ HERO ══════════════ -->
+      <section class="hero-section">
+        <div class="hero-bg-text" aria-hidden="true">ENFP</div>
+        <div class="hero-burst"   aria-hidden="true"></div>
+
+        <div class="campaigner-badge fade-up">The Campaigner</div>
+
+        <h1 class="logo-display">ENFP</h1>
+
+        <p class="hero-tagline">가능성을 보고, 불꽃을 피운다</p>
+        <span class="hand-accent">— everywhere is a spark waiting to happen —</span>
+
+        <div class="divider-spark fade-up delay-3">
+          <div class="spark-line"></div>
+          <div class="spark-dot"></div>
+          <div class="spark-dot" style="background:var(--color-bloom-400); box-shadow:0 0 6px var(--color-bloom-400);"></div>
+          <div class="spark-dot" style="background:var(--color-violet-300); box-shadow:0 0 6px var(--color-violet-300);"></div>
+          <div class="spark-line right"></div>
+        </div>
+
+        <p class="hero-quote fade-up delay-3">
+          "I don't follow roads —<br />
+          I follow the light<br />
+          that might become one."
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-3 mt-10 fade-up delay-4">
+          <span class="trait-pill">✨ Curious</span>
+          <span class="trait-pill">🌈 Imaginative</span>
+          <span class="trait-pill">💬 Enthusiastic</span>
+          <span class="trait-pill">🔥 Passionate</span>
+          <span class="trait-pill">🦋 Free-spirited</span>
+        </div>
+
+        <div class="mt-12 fade-up delay-5">
+          <a href="#spark" class="cta-btn">
+            <span>Ignite the Spark ✦</span>
+          </a>
+        </div>
+
+        <div class="scroll-indicator">
+          <span class="scroll-label">scroll</span>
+          <div class="scroll-line"></div>
+        </div>
+      </section>
+
+      <!-- ══════════════ STATS ══════════════ -->
+      <div class="stats-row">
+        <div class="stat-cell fade-up delay-1">
+          <div class="stat-number">8%</div>
+          <div class="stat-label">Of Population</div>
+        </div>
+        <div class="stat-cell fade-up delay-2">
+          <div class="stat-number">Ne</div>
+          <div class="stat-label">Dominant Function</div>
+        </div>
+        <div class="stat-cell fade-up delay-3">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">Possibilities Seen</div>
+        </div>
+      </div>
+
+      <!-- ══════════════ LETTERS ══════════════ -->
+      <section id="letters">
+        <div class="letters-grid">
+          <div class="letter-block l-e">
+            <div class="letter-char">E</div>
+            <div class="letter-word">Extraverted</div>
+            <div class="letter-desc">사람과 세상에서<br />에너지가 폭발한다</div>
+          </div>
+          <div class="letter-block l-n">
+            <div class="letter-char">N</div>
+            <div class="letter-word">iNtuitive</div>
+            <div class="letter-desc">가능성과 패턴을<br />온 세상에서 본다</div>
+          </div>
+          <div class="letter-block l-f">
+            <div class="letter-char">F</div>
+            <div class="letter-word">Feeling</div>
+            <div class="letter-desc">감정이 나침반이고<br />연결이 목적이다</div>
+          </div>
+          <div class="letter-block l-p">
+            <div class="letter-char">P</div>
+            <div class="letter-word">Perceiving</div>
+            <div class="letter-desc">열린 채로 흘러가며<br />새 문을 찾는다</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ SPARK SECTION ══════════════ -->
+      <section id="spark" class="py-24 px-6 max-w-6xl mx-auto">
+        <div class="mb-16 fade-up">
+          <div class="section-label mb-3">Core Nature</div>
+          <div class="section-title">The Three Flames<br />of the Campaigner</div>
+        </div>
+
+        <div class="spark-grid fade-up delay-2">
+          <div class="spark-card card-spark">
+            <span class="card-num">01</span>
+            <span class="card-icon">💡</span>
+            <div class="card-title">Curiosity</div>
+            <p class="card-desc">
+              ENFP의 지배 기능인 외향 직관(Ne)은 세상 모든 것에서 가능성을 본다. 평범한 대화에서 혁명적 아이디어를, 낯선 사람에게서 숨겨진 이야기를, 문제 속에서 창의적 해법을 발견한다. 이 무한한 호기심이 ENFP를 가장 다재다능한 유형으로 만든다. 지루함이란 가능성을 아직 발견하지 못한 상태일 뿐이다.
+            </p>
+          </div>
+          <div class="spark-card card-bloom">
+            <span class="card-num">02</span>
+            <span class="card-icon">🤝</span>
+            <div class="card-title">Connection</div>
+            <p class="card-desc">
+              ENFP는 단순히 사교적인 것이 아니라 진정한 연결을 갈망한다. 모든 사람에게서 특별한 무언가를 발견하고, 그것을 끌어내어 빛나게 하는 능력이 있다. 그들이 Champion이라 불리는 이유는 다른 사람의 꿈을 자신의 것처럼 열정적으로 응원하기 때문이다. 연결은 ENFP에게 에너지원이자 존재 이유다.
+            </p>
+          </div>
+          <div class="spark-card card-violet">
+            <span class="card-num">03</span>
+            <span class="card-icon">🌱</span>
+            <div class="card-title">Growth</div>
+            <p class="card-desc">
+              ENFP는 성장을 멈추지 않는다. 새로운 기술을 배우고, 새로운 관점을 흡수하며, 끊임없이 진화한다. 어제의 자신보다 오늘의 자신이 더 나아야 한다는 내적 충동이 있다. 이 성장 지향성은 종종 많은 것을 시작하고 방향을 바꾸게 하지만, 그 모든 경험이 ENFP를 더 풍요롭게 만든다.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ IDEAS BOX ══════════════ -->
+      <section class="py-10 px-6 max-w-6xl mx-auto">
+        <div class="ideas-box fade-up">
+          <span class="ideas-box-label">CAMPAIGNER_PROFILE</span>
+          <div class="idea-row">
+            <div class="idea-icon">⚡</div>
+            <div>
+              <div class="idea-name">The Ne Explosion</div>
+              <div class="idea-text">
+                외향 직관(Ne)이 지배하는 ENFP의 마음은 끊임없이 연결을 만들어낸다. A가 B를 떠올리고, B가 C로 이어지며, 어느새 Z에 닿아 있다. 이 폭발적인 아이디어 연상은 천재성의 원천이자, 때로는 집중력의 적이다.
+              </div>
+            </div>
+          </div>
+          <div class="idea-row">
+            <div class="idea-icon">🎭</div>
+            <div>
+              <div class="idea-name">The Authentic Self</div>
+              <div class="idea-text">
+                ENFP는 진정성을 핵심 가치로 여긴다. 사회적 역할이나 규범보다 자신의 본질에 충실하려 한다. 이 진정성이 그들을 매력적으로 만들지만, 때로는 기대에 부응해야 할 때 내적 갈등을 일으킨다.
+              </div>
+            </div>
+          </div>
+          <div class="idea-row">
+            <div class="idea-icon">🌊</div>
+            <div>
+              <div class="idea-name">The Emotional Depth</div>
+              <div class="idea-text">
+                외향적으로 보이지만 ENFP 내면에는 Fi(내향 감정)의 깊고 조용한 바다가 있다. 강한 개인적 가치관, 깊은 공감 능력, 그리고 자신과 타인의 감정에 대한 예민한 감수성이 그들을 단순한 "외향인"을 넘어서게 한다.
+              </div>
+            </div>
+          </div>
+          <div class="idea-row">
+            <div class="idea-icon">🚀</div>
+            <div>
+              <div class="idea-name">The Infinite Horizon</div>
+              <div class="idea-text">
+                ENFP에게 미래는 항상 열려 있다. 어떤 상황에서도 가능성의 문을 보며, 절망보다 희망을 먼저 떠올린다. 이 낙관성은 전염성이 있어 주변 사람들을 함께 앞으로 나아가게 만든다.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════ ORIGIN ══════════════ -->
+      <section class="py-20 px-6 max-w-4xl mx-auto text-center">
+        <div class="section-label mb-6 fade-up">About</div>
+        <p class="origin-text fade-up delay-1">
+          <em>ENFP</em>는 Myers-Briggs 16개 유형 중
+          외향(E), 직관(N), 감정(F), 인식(P)의 조합으로,
+          전체 인구의 약 <em>8%</em>를 차지한다.
+          <em>Campaigner</em> 또는 <em>Champion</em>이라 불리며,
+          에너지 넘치는 아이디어와 사람에 대한 진정한 관심으로 세상을 더 나은 곳으로 만들려 한다.
+          지배 기능인 <em>외향 직관(Ne)</em>은 모든 것에서 숨겨진 가능성과 연결을 발견한다.
+          ENFP는 단순히 꿈을 꾸는 것에 그치지 않고,
+          그 꿈이 <em>불꽃</em>이 되어 다른 이들의 마음에도 번지도록 만든다.
+        </p>
+      </section>
+
+      <!-- ══════════════ CONTACT ══════════════ -->
+      <section id="contact" class="py-24 px-6 text-center"
+        style="border-top: 1px solid rgba(255,167,38,0.07);">
+        <div class="section-label mb-6 fade-up">Contact</div>
+        <div class="section-title mb-10 fade-up delay-1">Let's Connect ✦</div>
+        <a href="mailto:hello@enfp.kr" class="contact-link fade-up delay-2">
+          hello@enfp.kr
+        </a>
+        <p class="mt-8 fade-up delay-3"
+          style="font-family:var(--font-hand); font-size:1.1rem;
+                 color:rgba(240,234,248,0.28); letter-spacing:0.05em;">
+          curious · passionate · endlessly possible
+        </p>
+      </section>
+
+    </main>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer class="site-footer">
+      <span class="footer-copy">© 2026 enfp.kr — All rights reserved.</span>
+      <span class="footer-copy" style="opacity:0.5;">
+        spark · connect · imagine · become
+      </span>
+    </footer>
+
+  </div><!-- /site-wrapper -->
+
+  <!-- ══════════════ PARTICLE SCRIPT ══════════════ -->
+  <script>
+    (() => {
+      const canvas = document.getElementById('spark-canvas');
+      const ctx    = canvas.getContext('2d');
+
+      /* Palette */
+      const SPARK  = 'rgba(255, 167,  38,';
+      const BLOOM  = 'rgba(244,  67,  54,';
+      const VIOLET = 'rgba(171,  71, 188,';
+      const SKY    = 'rgba( 41, 182, 246,';
+      const LIME   = 'rgba(212, 225,  87,';
+      const COLORS = [SPARK, BLOOM, VIOLET, SKY, LIME];
+
+      let W, H;
+      const resize = () => {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      };
+      window.addEventListener('resize', () => { resize(); rebuildAll(); });
+      resize();
+
+      /* ─── 1. SparkOrb — glowing radial orbs drifting upward ─── */
+      class SparkOrb {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+          this.x     = Math.random() * W;
+          this.y     = init ? Math.random() * H : H + 30;
+          this.r     = Math.random() * 55 + 20;
+          this.vy    = -(Math.random() * 0.28 + 0.06);
+          this.vx    = (Math.random() - 0.5) * 0.18;
+          this.life     = 0;
+          this.maxLife  = Math.random() * 500 + 350;
+          this.color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+        }
+        update() {
+          this.x += this.vx + Math.sin(this.life * 0.015) * 0.3;
+          this.y += this.vy;
+          this.life++;
+          if (this.y + this.r < -10 || this.life > this.maxLife) this.reset();
+        }
+        draw() {
+          const t  = this.life / this.maxLife;
+          const a  = t < 0.12 ? t / 0.12 : t > 0.85 ? (1 - t) / 0.15 : 1;
+          const grd = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+          grd.addColorStop(0, this.color + (a * 0.2) + ')');
+          grd.addColorStop(1, this.color + '0)');
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+        }
+      }
+
+      /* ─── 2. FireflyDot — small bright dots with random paths ─── */
+      class FireflyDot {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+          this.x     = Math.random() * W;
+          this.y     = init ? Math.random() * H : H + 8;
+          this.r     = Math.random() * 2.2 + 0.5;
+          this.vy    = -(Math.random() * 0.55 + 0.12);
+          this.vx    = (Math.random() - 0.5) * 0.4;
+          this.life     = 0;
+          this.maxLife  = Math.random() * 350 + 200;
+          this.color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.phase    = Math.random() * Math.PI * 2;
+        }
+        update() {
+          this.x += this.vx + Math.sin(this.life * 0.04 + this.phase) * 0.6;
+          this.y += this.vy;
+          this.life++;
+          if (this.y < -8 || this.life > this.maxLife) this.reset();
+        }
+        draw() {
+          const t = this.life / this.maxLife;
+          const a = t < 0.1 ? t / 0.1 : t > 0.88 ? (1 - t) / 0.12 : 1;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+          ctx.fillStyle = this.color + (a * 0.75) + ')';
+          ctx.fill();
+          /* glow halo */
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
+          ctx.fillStyle = this.color + (a * 0.12) + ')';
+          ctx.fill();
+        }
+      }
+
+      /* ─── 3. RainbowArc — curved arc strokes ─── */
+      class RainbowArc {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+          this.cx    = Math.random() * W;
+          this.cy    = Math.random() * H;
+          this.r     = Math.random() * 80 + 30;
+          this.start = Math.random() * Math.PI * 2;
+          this.sweep = Math.random() * Math.PI * 0.7 + 0.2;
+          this.prog  = init ? Math.random() : 0;
+          this.speed = Math.random() * 0.006 + 0.002;
+          this.life     = 0;
+          this.maxLife  = Math.floor(1 / this.speed);
+          this.color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.width    = Math.random() * 1.2 + 0.3;
+          this.delay    = init ? 0 : Math.floor(Math.random() * 150);
+        }
+        update() {
+          if (this.delay > 0) { this.delay--; return; }
+          this.prog += this.speed;
+          if (this.prog >= 1) this.reset();
+        }
+        draw() {
+          if (this.delay > 0 || this.prog <= 0) return;
+          const t   = this.prog;
+          const a   = t < 0.12 ? t / 0.12 : t > 0.88 ? (1 - t) / 0.12 : 1;
+          const end = this.start + this.sweep * t;
+          ctx.beginPath();
+          ctx.arc(this.cx, this.cy, this.r, this.start, end);
+          ctx.strokeStyle = this.color + (a * 0.28) + ')';
+          ctx.lineWidth   = this.width;
+          ctx.stroke();
+        }
+      }
+
+      /* ─── 4. BurstRay — radial line bursts from random centers ─── */
+      class BurstRay {
+        constructor() { this.reset(true); }
+        reset(init = false) {
+          this.cx    = Math.random() * W;
+          this.cy    = Math.random() * H;
+          this.angle = Math.random() * Math.PI * 2;
+          this.len   = Math.random() * 60 + 20;
+          this.prog  = init ? Math.random() : 0;
+          this.speed = Math.random() * 0.012 + 0.004;
+          this.life     = 0;
+          this.maxLife  = Math.floor(1 / this.speed);
+          this.color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.width    = Math.random() * 0.8 + 0.2;
+          this.delay    = init ? 0 : Math.floor(Math.random() * 200);
+        }
+        update() {
+          if (this.delay > 0) { this.delay--; return; }
+          this.prog += this.speed;
+          if (this.prog >= 1) this.reset();
+        }
+        draw() {
+          if (this.delay > 0 || this.prog <= 0) return;
+          const t  = this.prog;
+          const a  = t < 0.1 ? t / 0.1 : t > 0.85 ? (1 - t) / 0.15 : 1;
+          const ex = this.cx + Math.cos(this.angle) * this.len * t;
+          const ey = this.cy + Math.sin(this.angle) * this.len * t;
+          ctx.beginPath();
+          ctx.moveTo(this.cx, this.cy);
+          ctx.lineTo(ex, ey);
+          ctx.strokeStyle = this.color + (a * 0.22) + ')';
+          ctx.lineWidth   = this.width;
+          ctx.stroke();
+        }
+      }
+
+      /* ── Pools ── */
+      let orbs, flies, arcs, rays;
+      const rebuildAll = () => {
+        orbs  = Array.from({ length: 18 }, () => new SparkOrb());
+        flies = Array.from({ length: 55 }, () => new FireflyDot());
+        arcs  = Array.from({ length: 22 }, () => new RainbowArc());
+        rays  = Array.from({ length: 28 }, () => new BurstRay());
+      };
+      rebuildAll();
+
+      /* ── Loop ── */
+      const loop = () => {
+        ctx.clearRect(0, 0, W, H);
+        orbs.forEach(p  => { p.update(); p.draw(); });
+        arcs.forEach(p  => { p.update(); p.draw(); });
+        rays.forEach(p  => { p.update(); p.draw(); });
+        flies.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(loop);
+      };
+      loop();
+    })();
+  </script>
+
+</body>
+</html>
