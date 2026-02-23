@@ -1,0 +1,1141 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ENFP — enfp.kr</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style type="text/tailwindcss">
+    @theme {
+      --color-spark-50:  #fffbeb;
+      --color-spark-100: #fef3c7;
+      --color-spark-200: #fde68a;
+      --color-spark-300: #fcd34d;
+      --color-spark-400: #fbbf24;
+      --color-spark-500: #f59e0b;
+      --color-spark-600: #d97706;
+      --color-spark-700: #b45309;
+      --color-spark-800: #92400e;
+      --color-spark-900: #78350f;
+      --color-flame-400: #fb923c;
+      --color-flame-500: #f97316;
+      --color-flame-600: #ea580c;
+      --color-aurora-400: #34d399;
+      --color-aurora-500: #10b981;
+      --color-sky-400:   #38bdf8;
+      --color-rose-400:  #fb7185;
+      --color-void-900:  #0f0e17;
+      --color-void-950:  #09080f;
+      --font-sans:  'Inter', system-ui, sans-serif;
+      --font-serif: 'Noto Serif KR', Georgia, serif;
+    }
+  </style>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #09080f;
+      color: #fde68a;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ── Dynamic aurora background ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 65% 40% at 10% 20%, rgba(251,191,36,.07) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 35% at 90% 80%, rgba(251,146,60,.06) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 30% at 55% 40%, rgba(52,211,153,.04) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 28% at 30% 85%, rgba(56,189,248,.04) 0%, transparent 50%),
+        radial-gradient(ellipse 35% 25% at 75% 15%, rgba(251,113,133,.04) 0%, transparent 50%);
+    }
+
+    /* ── Grain ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* ── Shimmer: gold → white → orange → yellow ── */
+    @keyframes shimmer-enfp {
+      0%   { background-position: -700px 0; }
+      100% { background-position:  700px 0; }
+    }
+    .shimmer-text {
+      background: linear-gradient(90deg,
+        #fbbf24 0%,
+        #fffbeb 30%,
+        #fb923c 52%,
+        #fcd34d 72%,
+        #f59e0b 100%
+      );
+      background-size: 1400px auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: shimmer-enfp 5s ease-in-out infinite;
+    }
+
+    /* ── Rainbow shimmer for special elements ── */
+    @keyframes rainbow-shift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .rainbow-text {
+      background: linear-gradient(90deg,
+        #fbbf24, #fb923c, #fb7185, #a78bfa, #38bdf8, #34d399, #fbbf24
+      );
+      background-size: 300% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: rainbow-shift 4s ease infinite;
+    }
+
+    /* ── Spark burst particles ── */
+    @keyframes spark-fly {
+      0%   { transform: translate(0,0) scale(1); opacity: .9; }
+      60%  { opacity: .5; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(.1); opacity: 0; }
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+      10%  { opacity: .7; }
+      90%  { opacity: .3; }
+      100% { transform: translateY(110px) rotate(var(--r)); opacity: 0; }
+    }
+    @keyframes float-bounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33%       { transform: translateY(-80px) rotate(120deg); }
+      66%       { transform: translateY(-50px) rotate(240deg); }
+    }
+
+    /* ── Energetic pulse ── */
+    @keyframes energy-pulse {
+      0%, 100% { transform: scale(1);    opacity: .5; }
+      50%       { transform: scale(1.12); opacity: .85; }
+    }
+
+    /* ── Reveal ── */
+    @keyframes reveal-up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; }
+    .reveal.in { animation: reveal-up .5s ease forwards; }
+
+    /* ── Card ── */
+    .enfp-card {
+      background: linear-gradient(135deg,
+        rgba(30,26,18,.75),
+        rgba(9,8,15,.92)
+      );
+      border: 1px solid rgba(251,191,36,.1);
+      backdrop-filter: blur(14px);
+      transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+    }
+    .enfp-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(251,191,36,.22);
+      box-shadow: 0 16px 48px rgba(0,0,0,.55), 0 0 0 1px rgba(251,191,36,.06);
+    }
+
+    /* ── Link button ── */
+    .link-btn {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      width: 100%;
+      padding: .875rem 1.25rem;
+      border-radius: .75rem;
+      font-size: .9375rem;
+      font-weight: 500;
+      text-decoration: none;
+      color: #fde68a;
+      background: linear-gradient(135deg, rgba(30,26,18,.75), rgba(9,8,15,.92));
+      border: 1px solid rgba(251,191,36,.1);
+      transition: all .25s ease;
+    }
+    .link-btn:hover {
+      color: #fffbeb;
+      border-color: rgba(251,191,36,.28);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.45), 0 0 18px rgba(251,191,36,.08);
+    }
+    .link-btn.spark-btn {
+      border-color: rgba(251,146,60,.22);
+      background: linear-gradient(135deg, rgba(180,83,9,.18), rgba(9,8,15,.92));
+    }
+    .link-btn.spark-btn:hover {
+      border-color: rgba(251,146,60,.45);
+      box-shadow: 0 8px 28px rgba(0,0,0,.45), 0 0 20px rgba(251,146,60,.15);
+    }
+
+    /* ── Icon badge ── */
+    .icon-badge {
+      width: 2rem; height: 2rem;
+      border-radius: .5rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Carousel ── */
+    .carousel-track {
+      display: flex;
+      transition: transform .42s cubic-bezier(.25,.46,.45,.94);
+    }
+    .carousel-slide { min-width: 100%; }
+
+    /* ── YouTube ── */
+    .yt-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0; overflow: hidden;
+    }
+    .yt-wrap iframe {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ── Vinyl spin ── */
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+    .vinyl-spin { animation: spin-slow 4.5s linear infinite; }
+
+    /* ── Tag ── */
+    .tag {
+      display: inline-flex; align-items: center;
+      padding: .2rem .65rem;
+      border-radius: 9999px;
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      background: rgba(251,191,36,.07);
+      border: 1px solid rgba(251,191,36,.14);
+      color: #fbbf24;
+    }
+
+    /* ── Spark tag ── */
+    .spark-tag {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .28rem .75rem;
+      border-radius: 9999px;
+      font-size: .78rem;
+      background: rgba(251,191,36,.08);
+      border: 1px solid rgba(251,191,36,.15);
+      color: #fde68a;
+      transition: all .2s;
+    }
+    .spark-tag:hover {
+      background: rgba(251,191,36,.14);
+      border-color: rgba(251,191,36,.3);
+    }
+
+    /* ── Divider ── */
+    .enfp-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(251,191,36,.15), transparent);
+      border: none;
+    }
+
+    /* ── Ne explosion meter ── */
+    @keyframes ne-fill {
+      from { width: 0; }
+      to   { width: var(--w); }
+    }
+    .ne-bar {
+      height: 4px;
+      border-radius: 9999px;
+      animation: ne-fill 1.4s cubic-bezier(.34,1.56,.64,1) forwards;
+      animation-play-state: paused;
+    }
+    .ne-bar.run { animation-play-state: running; }
+
+    /* ── Idea bubble ── */
+    @keyframes bubble-pop {
+      0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+      70%  { transform: scale(1.1) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    .bubble-pop { animation: bubble-pop .5s cubic-bezier(.34,1.56,.64,1) forwards; opacity: 0; }
+
+    /* ── Accordion ── */
+    details > summary { list-style: none; cursor: pointer; user-select: none; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .chev { transform: rotate(180deg); }
+    .chev { transition: transform .22s ease; display: inline-block; }
+
+    /* ── Progress ── */
+    .progress-bar { width: 28%; }
+    @keyframes progress-move {
+      0%   { width: 28%; }
+      100% { width: 85%; }
+    }
+    .progress-bar.playing { animation: progress-move 260s linear forwards; }
+
+    /* ── Flame border ── */
+    .flame-border {
+      border: 1px solid rgba(251,146,60,.25);
+      box-shadow: 0 0 18px rgba(251,146,60,.06), inset 0 0 18px rgba(251,191,36,.03);
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #09080f; }
+    ::-webkit-scrollbar-thumb { background: #2d1f05; border-radius: 3px; }
+  </style>
+</head>
+
+<body>
+
+  <!-- ░░ PARTICLE LAYER ░░ -->
+  <div id="ptcl" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;"></div>
+
+  <!-- ░░ CORNER DECO: spark burst ░░ -->
+  <div style="position:fixed;top:-30px;right:-30px;width:180px;height:180px;opacity:.06;pointer-events:none;z-index:0;">
+    <svg viewBox="0 0 180 180" fill="none">
+      <line x1="90" y1="0"  x2="90" y2="180" stroke="#fbbf24" stroke-width=".8"/>
+      <line x1="0"  y1="90" x2="180" y2="90"  stroke="#fbbf24" stroke-width=".8"/>
+      <line x1="15" y1="15" x2="165" y2="165" stroke="#fb923c" stroke-width=".6"/>
+      <line x1="165" y1="15" x2="15" y2="165" stroke="#fb923c" stroke-width=".6"/>
+      <circle cx="90" cy="90" r="60" stroke="#fcd34d" stroke-width=".5"/>
+      <circle cx="90" cy="90" r="30" stroke="#fbbf24" stroke-width=".4"/>
+      <polygon points="90,30 102,66 140,66 110,88 122,124 90,102 58,124 70,88 40,66 78,66" stroke="#fbbf24" stroke-width=".7"/>
+    </svg>
+  </div>
+
+  <!-- ░░ MAIN ░░ -->
+  <main style="position:relative;z-index:1;max-width:480px;margin:0 auto;padding:3rem 1rem 6rem;">
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <header class="reveal" style="text-align:center;margin-bottom:2.5rem;">
+
+      <!-- avatar -->
+      <div style="position:relative;display:inline-block;margin-bottom:1.4rem;">
+        <!-- energy rings -->
+        <div style="position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,rgba(251,191,36,.22),transparent 70%);animation:energy-pulse 3s ease-in-out infinite;pointer-events:none;"></div>
+        <div style="position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(251,191,36,.12);animation:energy-pulse 3s ease-in-out .5s infinite;pointer-events:none;"></div>
+        <div style="width:96px;height:96px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(251,191,36,.3);margin:0 auto;position:relative;background:linear-gradient(135deg,#1e1a12,#09080f);">
+          <img src="https://api.dicebear.com/9.x/shapes/svg?seed=enfp&backgroundColor=0f0e17&color=fbbf24,f97316&shape0=ellipse&shape1=polygon"
+               alt="ENFP"
+               style="width:100%;height:100%;object-fit:cover;"
+               onerror="this.style.display='none'" />
+        </div>
+        <!-- status dot: spark yellow -->
+        <span style="position:absolute;bottom:4px;right:4px;width:14px;height:14px;background:#fbbf24;border-radius:50%;border:2.5px solid #09080f;display:block;box-shadow:0 0 8px rgba(251,191,36,.7);"></span>
+      </div>
+
+      <!-- name -->
+      <h1 class="shimmer-text" style="font-family:'Noto Serif KR',serif;font-size:2.2rem;font-weight:700;letter-spacing:.12em;margin-bottom:.3rem;">ENFP</h1>
+      <p style="color:#92400e;font-size:.75rem;letter-spacing:.28em;text-transform:uppercase;margin-bottom:.45rem;">enfp.kr</p>
+      <p style="color:#d97706;font-size:.8rem;letter-spacing:.06em;margin-bottom:.75rem;font-weight:400;">The Campaigner ✦ The Champion</p>
+
+      <!-- hero quote -->
+      <p style="color:#b45309;font-size:.82rem;font-style:italic;margin-bottom:1rem;line-height:1.7;max-width:290px;margin-left:auto;margin-right:auto;">
+        "I don't follow roads —<br/>
+        <span style="color:#d97706;">I follow the light that might become one."</span>
+      </p>
+
+      <!-- spark tags -->
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;margin-bottom:1.4rem;">
+        <span class="spark-tag">✨ Curious</span>
+        <span class="spark-tag">🌈 Imaginative</span>
+        <span class="spark-tag">💬 Enthusiastic</span>
+        <span class="spark-tag">🔥 Passionate</span>
+        <span class="spark-tag">🦋 Free-spirited</span>
+      </div>
+
+      <!-- E · N · F · P stats bar -->
+      <div style="display:flex;justify-content:center;align-items:stretch;gap:0;border:1px solid rgba(251,191,36,.12);border-radius:.875rem;overflow:hidden;background:rgba(30,26,18,.5);">
+        <div style="flex:1;padding:.8rem .5rem;text-align:center;border-right:1px solid rgba(251,191,36,.08);">
+          <p style="color:#fde68a;font-weight:700;font-size:1.2rem;font-family:'Noto Serif KR',serif;line-height:1;">E</p>
+          <p style="color:#92400e;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;margin-top:.2rem;">Extra</p>
+        </div>
+        <div style="flex:1;padding:.8rem .5rem;text-align:center;border-right:1px solid rgba(251,191,36,.08);">
+          <p style="color:#fde68a;font-weight:700;font-size:1.2rem;font-family:'Noto Serif KR',serif;line-height:1;">N</p>
+          <p style="color:#92400e;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;margin-top:.2rem;">iNtuition</p>
+        </div>
+        <div style="flex:1;padding:.8rem .5rem;text-align:center;border-right:1px solid rgba(251,191,36,.08);">
+          <p style="color:#fde68a;font-weight:700;font-size:1.2rem;font-family:'Noto Serif KR',serif;line-height:1;">F</p>
+          <p style="color:#92400e;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;margin-top:.2rem;">Feeling</p>
+        </div>
+        <div style="flex:1;padding:.8rem .5rem;text-align:center;">
+          <p style="color:#fde68a;font-weight:700;font-size:1.2rem;font-family:'Noto Serif KR',serif;line-height:1;">P</p>
+          <p style="color:#92400e;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;margin-top:.2rem;">Perceive</p>
+        </div>
+      </div>
+    </header>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ ANNOUNCEMENT ═══════════ -->
+    <div class="reveal enfp-card" style="border-radius:.875rem;padding:1rem 1.125rem;margin-bottom:1.75rem;border-left:2.5px solid rgba(251,146,60,.55);display:flex;gap:.75rem;align-items:flex-start;">
+      <span style="font-size:1.3rem;flex-shrink:0;margin-top:1px;">⚡</span>
+      <div>
+        <p style="color:#fde68a;font-size:.875rem;font-weight:600;margin-bottom:.2rem;">New Spark: Campaigner Vol.4 공개!</p>
+        <p style="color:#92400e;font-size:.78rem;line-height:1.65;">everywhere is a spark waiting to happen — 새로운 불꽃이 피어올랐습니다.</p>
+        <a href="#" style="color:#fbbf24;font-size:.78rem;font-weight:500;text-decoration:none;display:inline-block;margin-top:.35rem;transition:color .2s;"
+           onmouseover="this.style.color='#fde68a'" onmouseout="this.style.color='#fbbf24'">점화하기 →</a>
+      </div>
+    </div>
+
+    <!-- ═══════════ SOCIAL LINKS ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">소셜 채널</p>
+
+      <a href="#" class="link-btn" style="margin-bottom:.625rem;">
+        <span class="icon-badge" style="background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);">
+          <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </span>
+        <span style="flex:1;">Instagram</span>
+        <span style="color:#78350f;font-size:.78rem;">@enfp.kr</span>
+        <svg width="14" height="14" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+
+      <a href="#" class="link-btn spark-btn" style="margin-bottom:.625rem;">
+        <span class="icon-badge" style="background:#dc2626;">
+          <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        </span>
+        <span style="flex:1;">YouTube</span>
+        <span style="color:#78350f;font-size:.78rem;">ENFP Channel</span>
+        <svg width="14" height="14" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+
+      <a href="#" class="link-btn" style="margin-bottom:.625rem;">
+        <span class="icon-badge" style="background:#09080f;border:1px solid #2d1f05;">
+          <svg width="14" height="14" fill="#fde68a" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </span>
+        <span style="flex:1;">X (Twitter)</span>
+        <span style="color:#78350f;font-size:.78rem;">@enfp_kr</span>
+        <svg width="14" height="14" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+
+      <a href="#" class="link-btn" style="margin-bottom:.625rem;">
+        <span class="icon-badge" style="background:#09080f;border:1px solid #2d1f05;">
+          <svg width="16" height="16" fill="#fde68a" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        </span>
+        <span style="flex:1;">GitHub</span>
+        <span style="color:#78350f;font-size:.78rem;">enfp-kr</span>
+        <svg width="14" height="14" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+
+      <a href="mailto:hello@enfp.kr" class="link-btn">
+        <span class="icon-badge" style="background:#2d1f05;">
+          <svg width="16" height="16" fill="none" stroke="#fbbf24" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        </span>
+        <span style="flex:1;">이메일</span>
+        <span style="color:#78350f;font-size:.78rem;">hello@enfp.kr</span>
+        <svg width="14" height="14" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </section>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ ENFP 전용: Ne 폭발 — 3 Flames ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">The Three Flames</p>
+      <div style="display:flex;flex-direction:column;gap:.625rem;">
+
+        <!-- Curiosity -->
+        <div class="enfp-card" style="border-radius:.875rem;padding:1rem 1.125rem;display:flex;gap:.875rem;align-items:flex-start;">
+          <div style="width:40px;height:40px;flex-shrink:0;border-radius:.625rem;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">💡</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;">
+              <p style="color:#fde68a;font-size:.875rem;font-weight:600;">Curiosity</p>
+              <span class="tag">01</span>
+            </div>
+            <p style="color:#78350f;font-size:.78rem;line-height:1.65;">세상 모든 것에서 가능성을 본다. 평범한 대화에서 혁명적 아이디어를, 낯선 사람에게서 숨겨진 이야기를 발견한다.</p>
+            <div style="margin-top:.65rem;background:#0f0e17;border-radius:9999px;height:4px;overflow:hidden;">
+              <div class="ne-bar run" style="--w:96%;background:linear-gradient(90deg,#f59e0b,#fde68a);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connection -->
+        <div class="enfp-card" style="border-radius:.875rem;padding:1rem 1.125rem;display:flex;gap:.875rem;align-items:flex-start;">
+          <div style="width:40px;height:40px;flex-shrink:0;border-radius:.625rem;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.16);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🤝</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;">
+              <p style="color:#fde68a;font-size:.875rem;font-weight:600;">Connection</p>
+              <span class="tag">02</span>
+            </div>
+            <p style="color:#78350f;font-size:.78rem;line-height:1.65;">모든 사람에게서 특별한 무언가를 발견하고 끌어내어 빛나게 한다. 다른 사람의 꿈을 자신의 것처럼 열정적으로 응원한다.</p>
+            <div style="margin-top:.65rem;background:#0f0e17;border-radius:9999px;height:4px;overflow:hidden;">
+              <div class="ne-bar run" style="--w:88%;animation-delay:.2s;background:linear-gradient(90deg,#10b981,#34d399);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Growth -->
+        <div class="enfp-card" style="border-radius:.875rem;padding:1rem 1.125rem;display:flex;gap:.875rem;align-items:flex-start;">
+          <div style="width:40px;height:40px;flex-shrink:0;border-radius:.625rem;background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.14);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🌱</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.3rem;">
+              <p style="color:#fde68a;font-size:.875rem;font-weight:600;">Growth</p>
+              <span class="tag">03</span>
+            </div>
+            <p style="color:#78350f;font-size:.78rem;line-height:1.65;">성장을 멈추지 않는다. 새로운 기술과 관점을 흡수하며 끊임없이 진화한다. 어제의 자신보다 오늘의 자신이 더 나아야 한다.</p>
+            <div style="margin-top:.65rem;background:#0f0e17;border-radius:9999px;height:4px;overflow:hidden;">
+              <div class="ne-bar run" style="--w:82%;animation-delay:.4s;background:linear-gradient(90deg,#0ea5e9,#38bdf8);"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <p style="color:#451a03;font-size:.7rem;text-align:center;margin-top:.875rem;letter-spacing:.06em;">전체 인구의 약 <span style="color:#78350f;">8%</span> · Ne dominant</p>
+    </section>
+
+    <!-- ═══════════ FEATURED VIDEO ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">추천 영상</p>
+      <div class="enfp-card" style="border-radius:.875rem;overflow:hidden;">
+        <div class="yt-wrap">
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&modestbranding=1"
+                  title="ENFP Featured Video"
+                  allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+                  allowfullscreen></iframe>
+        </div>
+        <div style="padding:1rem;">
+          <h3 style="color:#fef3c7;font-size:.875rem;font-weight:600;margin-bottom:.35rem;">가능성을 보고, 불꽃을 피운다 — ENFP Documentary</h3>
+          <p style="color:#92400e;font-size:.78rem;line-height:1.65;margin-bottom:.6rem;">외향 직관(Ne)이 지배하는 마음의 폭발적인 아이디어 연상. everywhere is a spark waiting to happen.</p>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <span style="color:#78350f;font-size:.72rem;display:flex;align-items:center;gap:.25rem;">
+              <svg width="12" height="12" fill="#78350f" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+              31.4K
+            </span>
+            <span style="color:#78350f;font-size:.72rem;display:flex;align-items:center;gap:.25rem;">
+              <svg width="12" height="12" fill="#78350f" viewBox="0 0 20 20"><path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/></svg>
+              3.8K
+            </span>
+            <span class="tag" style="margin-left:auto;">다큐멘터리</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ VIDEO PLAYLIST ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">영상 플레이리스트</p>
+
+      <a href="#" class="enfp-card" style="text-decoration:none;display:flex;gap:.75rem;align-items:center;padding:.75rem;border-radius:.75rem;margin-bottom:.625rem;">
+        <div style="width:80px;height:52px;border-radius:.5rem;overflow:hidden;flex-shrink:0;background:#0f0e17;position:relative;">
+          <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.55;" onerror="this.style.display='none'" />
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;">
+              <svg width="10" height="10" fill="white" viewBox="0 0 20 20" style="margin-left:2px;"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <p style="color:#fde68a;font-size:.85rem;font-weight:500;margin-bottom:.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Ne 폭발 — 아이디어가 아이디어를 낳을 때</p>
+          <p style="color:#78350f;font-size:.72rem;">15:22 · 9.7K 조회</p>
+        </div>
+      </a>
+
+      <a href="#" class="enfp-card" style="text-decoration:none;display:flex;gap:.75rem;align-items:center;padding:.75rem;border-radius:.75rem;margin-bottom:.625rem;">
+        <div style="width:80px;height:52px;border-radius:.5rem;overflow:hidden;flex-shrink:0;position:relative;">
+          <div style="width:100%;height:100%;background:radial-gradient(ellipse at center,rgba(251,191,36,.25),#09080f);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🌈</div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;">
+              <svg width="10" height="10" fill="white" viewBox="0 0 20 20" style="margin-left:2px;"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <p style="color:#fde68a;font-size:.85rem;font-weight:500;margin-bottom:.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">진정성 — The Authentic Self</p>
+          <p style="color:#78350f;font-size:.72rem;">21:08 · 14.3K 조회</p>
+        </div>
+      </a>
+
+      <a href="#" class="enfp-card" style="text-decoration:none;display:flex;gap:.75rem;align-items:center;padding:.75rem;border-radius:.75rem;">
+        <div style="width:80px;height:52px;border-radius:.5rem;overflow:hidden;flex-shrink:0;position:relative;">
+          <div style="width:100%;height:100%;background:linear-gradient(135deg,#2d1f05,#1a1200);display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🚀</div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+            <div style="width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;">
+              <svg width="10" height="10" fill="white" viewBox="0 0 20 20" style="margin-left:2px;"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <p style="color:#fde68a;font-size:.85rem;font-weight:500;margin-bottom:.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">The Infinite Horizon — 무한한 가능성</p>
+          <p style="color:#78350f;font-size:.72rem;">18:55 · 7.2K 조회</p>
+        </div>
+      </a>
+    </section>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ IMAGE CAROUSEL ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+        <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;margin:0;">갤러리</p>
+        <div id="dots" style="display:flex;gap:.375rem;align-items:center;"></div>
+      </div>
+
+      <div id="car-wrap" style="position:relative;border-radius:.875rem;overflow:hidden;">
+        <div id="car-track" class="carousel-track">
+
+          <!-- slide 1: Curiosity -->
+          <div class="carousel-slide">
+            <div style="aspect-ratio:4/3;background:radial-gradient(ellipse at 45% 55%,rgba(251,191,36,.2) 0%,#09080f 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative;overflow:hidden;">
+              <div style="position:absolute;inset:0;opacity:.05;">
+                <svg width="100%" height="100%" viewBox="0 0 400 300" fill="none">
+                  <circle cx="200" cy="150" r="110" stroke="#fbbf24" stroke-width=".7"/>
+                  <circle cx="200" cy="150" r="70"  stroke="#f59e0b" stroke-width=".5"/>
+                  <line x1="200" y1="40"  x2="200" y2="260" stroke="#fcd34d" stroke-width=".5"/>
+                  <line x1="90"  y1="150" x2="310" y2="150" stroke="#fcd34d" stroke-width=".5"/>
+                  <line x1="122" y1="72"  x2="278" y2="228" stroke="#fbbf24" stroke-width=".4"/>
+                  <line x1="278" y1="72"  x2="122" y2="228" stroke="#fbbf24" stroke-width=".4"/>
+                </svg>
+              </div>
+              <span style="font-size:3.5rem;margin-bottom:1rem;">💡</span>
+              <p style="font-family:'Noto Serif KR',serif;color:#fef3c7;font-size:1.1rem;font-weight:500;margin-bottom:.35rem;">무한한 호기심</p>
+              <p style="color:#92400e;font-size:.8rem;">지루함이란 가능성을 아직 발견하지 못한 상태</p>
+              <div style="position:absolute;bottom:.75rem;left:1rem;right:1rem;display:flex;justify-content:space-between;align-items:flex-end;">
+                <span class="tag">Curiosity</span>
+                <span style="color:#78350f;font-size:.72rem;">1 / 5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 2: Connection -->
+          <div class="carousel-slide">
+            <div style="aspect-ratio:4/3;background:radial-gradient(ellipse at 60% 40%,rgba(52,211,153,.14) 0%,#09080f 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative;">
+              <span style="font-size:3.5rem;margin-bottom:1rem;">🤝</span>
+              <p style="font-family:'Noto Serif KR',serif;color:#fef3c7;font-size:1.1rem;font-weight:500;margin-bottom:.35rem;">진정한 연결</p>
+              <p style="color:#92400e;font-size:.8rem;">연결은 ENFP에게 에너지원이자 존재 이유다</p>
+              <div style="position:absolute;bottom:.75rem;left:1rem;right:1rem;display:flex;justify-content:space-between;">
+                <span class="tag">Connection</span>
+                <span style="color:#78350f;font-size:.72rem;">2 / 5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 3: Growth -->
+          <div class="carousel-slide">
+            <div style="aspect-ratio:4/3;background:radial-gradient(ellipse at 35% 65%,rgba(56,189,248,.12) 0%,#09080f 65%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;position:relative;">
+              <span style="font-size:3.5rem;margin-bottom:1rem;">🌱</span>
+              <p style="font-family:'Noto Serif KR',serif;color:#fef3c7;font-size:1.1rem;font-weight:500;margin-bottom:.35rem;">끝없는 성장</p>
+              <p style="color:#92400e;font-size:.8rem;">어제의 자신보다 오늘의 자신이 더 나아야 한다</p>
+              <div style="position:absolute;bottom:.75rem;left:1rem;right:1rem;display:flex;justify-content:space-between;">
+                <span class="tag">Growth</span>
+                <span style="color:#78350f;font-size:.72rem;">3 / 5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 4 -->
+          <div class="carousel-slide">
+            <div style="aspect-ratio:4/3;background:#07060e;overflow:hidden;position:relative;">
+              <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=600&q=80" alt="Spark"
+                   style="width:100%;height:100%;object-fit:cover;opacity:.4;" onerror="this.style.display='none'" />
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(9,8,15,.9) 0%,rgba(180,83,9,.07) 100%);"></div>
+              <div style="position:absolute;bottom:.75rem;left:1rem;right:1rem;display:flex;justify-content:space-between;align-items:flex-end;">
+                <div>
+                  <p style="color:#fef3c7;font-size:.85rem;font-weight:500;margin:0;">불꽃이 되다</p>
+                  <p style="color:#d97706;font-size:.72rem;margin:0;">everywhere is a spark</p>
+                </div>
+                <span style="color:#78350f;font-size:.72rem;">4 / 5</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- slide 5 -->
+          <div class="carousel-slide">
+            <div style="aspect-ratio:4/3;background:#07060e;overflow:hidden;position:relative;">
+              <img src="https://images.unsplash.com/photo-1518655048521-f130df041f66?w=600&q=80" alt="Horizon"
+                   style="width:100%;height:100%;object-fit:cover;opacity:.38;" onerror="this.style.display='none'" />
+              <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(9,8,15,.9) 0%,rgba(146,64,14,.06) 100%);"></div>
+              <div style="position:absolute;bottom:.75rem;left:1rem;right:1rem;display:flex;justify-content:space-between;align-items:flex-end;">
+                <div>
+                  <p style="color:#fef3c7;font-size:.85rem;font-weight:500;margin:0;">무한한 지평선</p>
+                  <p style="color:#d97706;font-size:.72rem;margin:0;">The Infinite Horizon</p>
+                </div>
+                <span style="color:#78350f;font-size:.72rem;">5 / 5</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- prev/next -->
+        <button onclick="carGo(carIdx-1)"
+          style="position:absolute;left:.5rem;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(9,8,15,.65);border:1px solid rgba(251,191,36,.18);display:flex;align-items:center;justify-content:center;color:#fbbf24;cursor:pointer;z-index:5;transition:all .2s;"
+          onmouseover="this.style.background='rgba(9,8,15,.9)';this.style.color='#fef3c7'"
+          onmouseout="this.style.background='rgba(9,8,15,.65)';this.style.color='#fbbf24'">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button onclick="carGo(carIdx+1)"
+          style="position:absolute;right:.5rem;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(9,8,15,.65);border:1px solid rgba(251,191,36,.18);display:flex;align-items:center;justify-content:center;color:#fbbf24;cursor:pointer;z-index:5;transition:all .2s;"
+          onmouseover="this.style.background='rgba(9,8,15,.9)';this.style.color='#fef3c7'"
+          onmouseout="this.style.background='rgba(9,8,15,.65)';this.style.color='#fbbf24'">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+      <p style="color:#451a03;font-size:.7rem;text-align:center;margin-top:.5rem;">← 스와이프하여 탐색 →</p>
+    </section>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ SINGLE FEATURE IMAGE ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">대표 작업</p>
+      <div class="enfp-card" style="border-radius:.875rem;overflow:hidden;cursor:pointer;"
+           onmouseover="this.querySelector('.fi-img').style.opacity='.55';this.querySelector('.fi-img').style.transform='scale(1.04)';this.querySelector('.fi-cta').style.opacity='1'"
+           onmouseout="this.querySelector('.fi-img').style.opacity='.38';this.querySelector('.fi-img').style.transform='scale(1)';this.querySelector('.fi-cta').style.opacity='0'">
+        <div style="position:relative;aspect-ratio:16/9;overflow:hidden;background:#07060e;">
+          <img class="fi-img" src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=800&q=80" alt="ENFP Featured"
+               style="width:100%;height:100%;object-fit:cover;opacity:.38;transition:all .5s ease;" onerror="this.style.display='none'" />
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(180,83,9,.1),transparent 60%);"></div>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <p class="shimmer-text" style="font-family:'Noto Serif KR',serif;font-size:2.5rem;font-weight:700;letter-spacing:.2em;margin:0;">ENFP</p>
+            <p style="color:#92400e;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;margin-top:.3rem;">The Campaigner</p>
+          </div>
+          <div class="fi-cta" style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:1rem;opacity:0;transition:opacity .3s;background:linear-gradient(to top,rgba(9,8,15,.75),transparent);">
+            <div style="display:flex;justify-content:space-between;align-items:center;width:100%;">
+              <span style="color:#fef3c7;font-size:.85rem;font-weight:500;">대표 포트폴리오 보기</span>
+              <span style="width:32px;height:32px;border-radius:50%;background:rgba(251,191,36,.18);display:flex;align-items:center;justify-content:center;border:1px solid rgba(251,191,36,.3);">
+                <svg width="14" height="14" fill="none" stroke="#fbbf24" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;">
+            <div>
+              <h3 style="color:#fef3c7;font-size:.875rem;font-weight:600;margin-bottom:.3rem;">Spark Series, 2024–25</h3>
+              <p style="color:#92400e;font-size:.78rem;line-height:1.6;">불꽃이 불꽃을 만나 더 큰 빛이 되는 순간들을 포착한 시각 작업 시리즈.</p>
+            </div>
+            <span class="tag" style="flex-shrink:0;">포트폴리오</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════ MUSIC / AMBIENT ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">에너지 트랙</p>
+      <div class="enfp-card" style="border-radius:.875rem;padding:1rem;">
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <!-- vinyl: golden spark -->
+          <div id="vinyl" style="width:56px;height:56px;border-radius:50%;flex-shrink:0;background:conic-gradient(from 0deg,#09080f,#2d1f05,#1a1200,#451a03,#09080f);border:3px solid #2d1f05;position:relative;box-shadow:0 0 14px rgba(251,191,36,.16);">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+              <div style="width:16px;height:16px;border-radius:50%;background:#09080f;border:2px solid #78350f;"></div>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <p style="color:#fef3c7;font-size:.875rem;font-weight:500;margin-bottom:.2rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Spark Ignition</p>
+            <p style="color:#78350f;font-size:.72rem;margin-bottom:.5rem;">ENFP Energy Vol.1 · 5:48</p>
+            <div style="height:3px;background:#0f0e17;border-radius:9999px;overflow:hidden;">
+              <div id="pbar" class="progress-bar" style="height:100%;background:linear-gradient(90deg,#f59e0b,#fde68a);border-radius:9999px;transition:width .3s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:.3rem;">
+              <span style="color:#451a03;font-size:.65rem;">1:38</span>
+              <span style="color:#451a03;font-size:.65rem;">5:48</span>
+            </div>
+          </div>
+          <button id="playbtn" onclick="togglePlay()"
+            style="width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,rgba(180,83,9,.38),rgba(9,8,15,.9));border:1px solid rgba(251,191,36,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;box-shadow:0 0 12px rgba(251,191,36,.14);">
+            <svg id="picon" width="14" height="14" fill="#fbbf24" viewBox="0 0 20 20" style="margin-left:2px;">
+              <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>
+            </svg>
+          </button>
+        </div>
+        <div style="border-top:1px solid #1e1a0a;margin-top:1rem;padding-top:1rem;display:flex;flex-direction:column;gap:.6rem;">
+          <div style="display:flex;align-items:center;gap:.75rem;cursor:pointer;">
+            <span style="color:#f59e0b;font-size:.7rem;width:1rem;text-align:center;">▶</span>
+            <span style="color:#fde68a;font-size:.78rem;flex:1;">Spark Ignition</span>
+            <span style="color:#451a03;font-size:.72rem;">5:48</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;cursor:pointer;"
+               onmouseover="this.querySelector('span:nth-child(2)').style.color='#fde68a'"
+               onmouseout="this.querySelector('span:nth-child(2)').style.color='#92400e'">
+            <span style="color:#451a03;font-size:.7rem;width:1rem;text-align:center;">02</span>
+            <span style="color:#92400e;font-size:.78rem;flex:1;transition:color .2s;">Ne Explosion</span>
+            <span style="color:#451a03;font-size:.72rem;">7:12</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;cursor:pointer;"
+               onmouseover="this.querySelector('span:nth-child(2)').style.color='#fde68a'"
+               onmouseout="this.querySelector('span:nth-child(2)').style.color='#92400e'">
+            <span style="color:#451a03;font-size:.7rem;width:1rem;text-align:center;">03</span>
+            <span style="color:#92400e;font-size:.78rem;flex:1;transition:color .2s;">Champion's Road</span>
+            <span style="color:#451a03;font-size:.72rem;">9:33</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ PROJECT CARDS ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">진행 중인 프로젝트</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+
+        <a href="#" class="enfp-card" style="border-radius:.875rem;padding:1rem;text-decoration:none;display:block;">
+          <div style="width:40px;height:40px;border-radius:.5rem;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:.75rem;">⚡</div>
+          <p style="color:#fef3c7;font-size:.85rem;font-weight:600;margin-bottom:.3rem;">Ne Lab</p>
+          <p style="color:#92400e;font-size:.75rem;line-height:1.5;margin-bottom:.75rem;">외향 직관 아이디어 폭발 아카이브</p>
+          <span style="color:#92400e;font-size:.75rem;display:flex;align-items:center;gap:.25rem;">탐색 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>
+        </a>
+
+        <a href="#" class="enfp-card" style="border-radius:.875rem;padding:1rem;text-decoration:none;display:block;">
+          <div style="width:40px;height:40px;border-radius:.5rem;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:.75rem;">🤝</div>
+          <p style="color:#fef3c7;font-size:.85rem;font-weight:600;margin-bottom:.3rem;">Champion Map</p>
+          <p style="color:#92400e;font-size:.75rem;line-height:1.5;margin-bottom:.75rem;">타인의 꿈을 응원하는 연결 프로젝트</p>
+          <span style="color:#92400e;font-size:.75rem;display:flex;align-items:center;gap:.25rem;">탐색 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>
+        </a>
+
+        <a href="#" class="enfp-card" style="border-radius:.875rem;padding:1rem;text-decoration:none;display:block;">
+          <div style="width:40px;height:40px;border-radius:.5rem;background:rgba(251,113,133,.07);border:1px solid rgba(251,113,133,.14);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:.75rem;">🦋</div>
+          <p style="color:#fef3c7;font-size:.85rem;font-weight:600;margin-bottom:.3rem;">Free Spirit</p>
+          <p style="color:#92400e;font-size:.75rem;line-height:1.5;margin-bottom:.75rem;">자유로운 영혼의 창작 실험실</p>
+          <span style="color:#92400e;font-size:.75rem;display:flex;align-items:center;gap:.25rem;">탐색 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>
+        </a>
+
+        <a href="#" class="enfp-card" style="border-radius:.875rem;padding:1rem;text-decoration:none;display:block;">
+          <div style="width:40px;height:40px;border-radius:.5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:.75rem;">🚀</div>
+          <p style="color:#fef3c7;font-size:.85rem;font-weight:600;margin-bottom:.3rem;">Open Source</p>
+          <p style="color:#92400e;font-size:.75rem;line-height:1.5;margin-bottom:.75rem;">불꽃에서 태어난 오픈소스 도구</p>
+          <span style="color:#92400e;font-size:.75rem;display:flex;align-items:center;gap:.25rem;">탐색 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></span>
+        </a>
+
+      </div>
+    </section>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ BLOG POSTS ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">최근 글</p>
+
+      <!-- ENFP 전용: 아이디어 인용 블록 -->
+      <div style="margin-bottom:1rem;padding:.9rem 1rem;border-radius:.75rem;background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.1);border-left:2.5px solid rgba(251,191,36,.4);">
+        <p style="color:#d97706;font-size:.85rem;line-height:1.8;font-style:italic;">"I don't follow roads —<br/>I follow the light that might become one."</p>
+        <p style="color:#451a03;font-size:.7rem;margin-top:.4rem;">— enfp.kr</p>
+      </div>
+
+      <a href="#" class="enfp-card" style="border-radius:.875rem;padding:1rem;text-decoration:none;display:flex;align-items:flex-start;gap:1rem;margin-bottom:.625rem;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;">
+            <span class="tag">에세이</span>
+            <span style="color:#451a03;font-size:.68rem;">2025.01.25</span>
+          </div>
+          <p style="color:#fef3c7;font-size:.875rem;font-weight:600;margin-bottom:.3rem;line-height:1.45;">Ne 폭발 — A가 B가 되고 어느새 Z에 닿는다</p>
+          <p style="color:#92400e;font-size:.76rem;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">외향 직관이 지배하는 ENFP의 마음속 아이디어 연상은 천재성의 원천이자, 때로는 집중력의 적이다.</p>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+
+      <a href="#" class="enfp-card" style="border-radius:.875rem;padding:1rem;text-decoration:none;display:flex;align-items:flex-start;gap:1rem;margin-bottom:.625rem;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;">
+            <span class="tag">연결</span>
+            <span style="color:#451a03;font-size:.68rem;">2025.01.12</span>
+          </div>
+          <p style="color:#fef3c7;font-size:.875rem;font-weight:600;margin-bottom:.3rem;line-height:1.45;">Champion이라 불리는 이유</p>
+          <p style="color:#92400e;font-size:.76rem;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">다른 사람의 꿈을 자신의 것처럼 열정적으로 응원하는 것. ENFP의 진정한 초능력에 대하여.</p>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+
+      <a href="#" class="enfp-card" style="border-radius:.875rem;padding:1rem;text-decoration:none;display:flex;align-items:flex-start;gap:1rem;margin-bottom:.875rem;">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;">
+            <span class="tag">성장</span>
+            <span style="color:#451a03;font-size:.68rem;">2025.01.01</span>
+          </div>
+          <p style="color:#fef3c7;font-size:.875rem;font-weight:600;margin-bottom:.3rem;line-height:1.45;">열린 결말을 살아간다는 것</p>
+          <p style="color:#92400e;font-size:.76rem;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">P — Perceiving. 계획보다 가능성, 완결보다 흐름. ENFP의 삶의 방식과 그 아름다운 혼돈에 대하여.</p>
+        </div>
+        <svg width="16" height="16" fill="none" stroke="#451a03" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      </a>
+
+      <a href="#" class="link-btn" style="justify-content:center;color:#d97706;">
+        모든 글 보기
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
+    </section>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ FAQ ACCORDION ═══════════ -->
+    <section class="reveal" style="margin-bottom:2rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">자주 묻는 질문</p>
+
+      <details class="enfp-card" style="border-radius:.875rem;overflow:hidden;margin-bottom:.625rem;">
+        <summary style="display:flex;align-items:center;justify-content:space-between;padding:1rem;">
+          <span style="color:#fde68a;font-size:.875rem;font-weight:500;">ENFP는 어떤 성격인가요?</span>
+          <span class="chev" style="color:#d97706;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </span>
+        </summary>
+        <div style="padding:0 1rem 1rem;">
+          <div class="enfp-divider" style="margin-bottom:.75rem;"></div>
+          <p style="color:#92400e;font-size:.8rem;line-height:1.75;">ENFP는 <strong style="color:#fde68a;">Extraverted · iNtuitive · Feeling · Perceiving</strong>의 약자로, The Campaigner 또는 Champion이라 불립니다. 에너지 넘치는 아이디어와 사람에 대한 진정한 관심으로 세상을 더 나은 곳으로 만들려 합니다. 전체 인구의 약 <strong style="color:#fde68a;">8%</strong>를 차지합니다.</p>
+        </div>
+      </details>
+
+      <details class="enfp-card" style="border-radius:.875rem;overflow:hidden;margin-bottom:.625rem;">
+        <summary style="display:flex;align-items:center;justify-content:space-between;padding:1rem;">
+          <span style="color:#fde68a;font-size:.875rem;font-weight:500;">협업이나 의뢰는 어떻게 하나요?</span>
+          <span class="chev" style="color:#d97706;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </span>
+        </summary>
+        <div style="padding:0 1rem 1rem;">
+          <div class="enfp-divider" style="margin-bottom:.75rem;"></div>
+          <p style="color:#92400e;font-size:.8rem;line-height:1.75;">hello@enfp.kr 로 메일을 보내주세요. 새로운 아이디어와 가능성에 항상 열려 있습니다. 형식보다는 열정이 담긴 메시지를 환영합니다!</p>
+        </div>
+      </details>
+
+      <details class="enfp-card" style="border-radius:.875rem;overflow:hidden;">
+        <summary style="display:flex;align-items:center;justify-content:space-between;padding:1rem;">
+          <span style="color:#fde68a;font-size:.875rem;font-weight:500;">enfp.kr 도메인을 선택한 이유는?</span>
+          <span class="chev" style="color:#d97706;flex-shrink:0;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </span>
+        </summary>
+        <div style="padding:0 1rem 1rem;">
+          <div class="enfp-divider" style="margin-bottom:.75rem;"></div>
+          <p style="color:#92400e;font-size:.8rem;line-height:1.75;">가능성을 보고 불꽃을 피우는 사람들 — everywhere is a spark waiting to happen. <strong style="color:#fde68a;">enfp.kr</strong>은 그 불꽃들이 모이는 공간입니다.</p>
+        </div>
+      </details>
+    </section>
+
+    <hr class="enfp-divider" style="margin-bottom:2rem;" />
+
+    <!-- ═══════════ NEWSLETTER ═══════════ -->
+    <section class="reveal" style="margin-bottom:1.75rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">뉴스레터 구독</p>
+      <div class="enfp-card" style="border-radius:.875rem;padding:1.25rem;">
+        <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1rem;">
+          <span style="font-size:1.5rem;">⚡</span>
+          <div>
+            <p style="color:#fef3c7;font-size:.875rem;font-weight:600;margin-bottom:.2rem;">불꽃 같은 소식을 받아보세요</p>
+            <p style="color:#92400e;font-size:.78rem;line-height:1.65;">새로운 아이디어, 프로젝트, 가능성의 이야기를 가장 먼저 받아볼 수 있습니다.</p>
+          </div>
+        </div>
+        <form onsubmit="doSubscribe(event)" style="display:flex;gap:.5rem;">
+          <input type="email" placeholder="your@email.com"
+            style="flex:1;background:#0f0e17;border:1px solid #2d1f05;border-radius:.5rem;padding:.65rem .9rem;color:#fde68a;font-size:.85rem;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='#78350f'" onblur="this.style.borderColor='#2d1f05'" />
+          <button type="submit"
+            style="padding:.65rem 1.1rem;border-radius:.5rem;background:linear-gradient(135deg,#b45309,#f59e0b);color:#09080f;font-size:.85rem;font-weight:700;border:none;cursor:pointer;white-space:nowrap;transition:filter .2s;"
+            onmouseover="this.style.filter='brightness(1.15)'" onmouseout="this.style.filter='brightness(1)'">구독</button>
+        </form>
+        <p id="sub-ok" style="color:#fbbf24;font-size:.78rem;margin-top:.5rem;display:none;">✓ 구독 완료! 불꽃 같은 소식을 기대해주세요 ⚡</p>
+      </div>
+    </section>
+
+    <!-- ═══════════ CONTACT FORM ═══════════ -->
+    <section class="reveal" style="margin-bottom:3rem;">
+      <p style="color:#78350f;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500;">연결하기</p>
+      <div class="enfp-card" style="border-radius:.875rem;padding:1.25rem;">
+        <form onsubmit="doContact(event)" style="display:flex;flex-direction:column;gap:.75rem;">
+          <input type="text" placeholder="이름"
+            style="background:#0f0e17;border:1px solid #2d1f05;border-radius:.5rem;padding:.65rem .9rem;color:#fde68a;font-size:.85rem;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='#78350f'" onblur="this.style.borderColor='#2d1f05'" />
+          <input type="email" placeholder="이메일"
+            style="background:#0f0e17;border:1px solid #2d1f05;border-radius:.5rem;padding:.65rem .9rem;color:#fde68a;font-size:.85rem;outline:none;transition:border-color .2s;"
+            onfocus="this.style.borderColor='#78350f'" onblur="this.style.borderColor='#2d1f05'" />
+          <select style="background:#0f0e17;border:1px solid #2d1f05;border-radius:.5rem;padding:.65rem .9rem;color:#92400e;font-size:.85rem;outline:none;transition:border-color .2s;appearance:none;"
+            onfocus="this.style.borderColor='#78350f'" onblur="this.style.borderColor='#2d1f05'">
+            <option value="" disabled selected>대화 주제 선택</option>
+            <option style="background:#0f0e17;color:#fde68a;">협업 제안</option>
+            <option style="background:#0f0e17;color:#fde68a;">프로젝트 의뢰</option>
+            <option style="background:#0f0e17;color:#fde68a;">아이디어 공유</option>
+            <option style="background:#0f0e17;color:#fde68a;">기타 문의</option>
+          </select>
+          <textarea rows="4" placeholder="당신의 불꽃 같은 아이디어를 들려주세요..."
+            style="background:#0f0e17;border:1px solid #2d1f05;border-radius:.5rem;padding:.65rem .9rem;color:#fde68a;font-size:.85rem;outline:none;resize:none;transition:border-color .2s;font-family:inherit;"
+            onfocus="this.style.borderColor='#78350f'" onblur="this.style.borderColor='#2d1f05'"></textarea>
+          <button type="submit"
+            style="width:100%;padding:.75rem;border-radius:.5rem;background:linear-gradient(135deg,#2d1f05,#1a1200);color:#fde68a;font-size:.875rem;font-weight:600;border:1px solid rgba(251,191,36,.12);cursor:pointer;transition:filter .2s,transform .2s;"
+            onmouseover="this.style.filter='brightness(1.3)';this.style.transform='translateY(-1px)'"
+            onmouseout="this.style.filter='brightness(1)';this.style.transform='translateY(0)'">
+            점화하기 ⚡
+          </button>
+        </form>
+        <p id="con-ok" style="color:#fbbf24;font-size:.78rem;margin-top:.5rem;text-align:center;display:none;">✓ 불꽃이 전달되었습니다! 곧 연락드리겠습니다 🔥</p>
+      </div>
+    </section>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer class="reveal" style="text-align:center;">
+      <hr class="enfp-divider" style="margin-bottom:1.5rem;" />
+      <div style="display:flex;justify-content:center;gap:.45rem;flex-wrap:wrap;margin-bottom:1rem;">
+        <span class="spark-tag" style="font-size:.7rem;">💡 Curious</span>
+        <span style="color:#1a1200;display:flex;align-items:center;font-size:.8rem;">·</span>
+        <span class="spark-tag" style="font-size:.7rem;">🤝 Connected</span>
+        <span style="color:#1a1200;display:flex;align-items:center;font-size:.8rem;">·</span>
+        <span class="spark-tag" style="font-size:.7rem;">🌱 Growing</span>
+      </div>
+      <p style="font-family:'Noto Serif KR',serif;color:#92400e;font-size:.875rem;font-style:italic;margin-bottom:.25rem;">가능성을 보고, 불꽃을 피운다</p>
+      <p style="color:#2d1f05;font-size:.75rem;margin-bottom:1rem;">— everywhere is a spark waiting to happen —</p>
+      <a href="https://enfp.kr"
+         style="color:#78350f;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;transition:color .2s;"
+         onmouseover="this.style.color='#d97706'" onmouseout="this.style.color='#78350f'">enfp.kr</a>
+      <p style="color:#2d1f05;font-size:.7rem;margin-top:.75rem;">E · N · F · P · Made with Tailwind CSS 4</p>
+      <p style="color:#1a1200;font-size:.68rem;margin-top:.3rem;letter-spacing:.06em;">curious · passionate · endlessly possible</p>
+    </footer>
+
+  </main>
+
+  <!-- ░░ JS ░░ -->
+  <script>
+    // ── Particles: sparks ──────────────────────────
+    (function() {
+      const c = document.getElementById('ptcl');
+      const colors = [
+        'rgba(251,191,36,', 'rgba(251,146,60,',
+        'rgba(52,211,153,', 'rgba(56,189,248,',
+        'rgba(251,113,133,'
+      ];
+
+      // spark orbs (rising)
+      for (let i = 0; i < 14; i++) {
+        const e = document.createElement('div');
+        const s = Math.random() * 4 + 2;
+        const col = colors[Math.floor(Math.random() * colors.length)];
+        e.style.cssText = `
+          position:absolute;
+          width:${s}px; height:${s}px;
+          border-radius:50%;
+          background:${col}${Math.random() * .5 + .2});
+          left:${Math.random() * 100}%;
+          bottom:${Math.random() * 20}%;
+          animation:float-bounce ${Math.random() * 6 + 5}s ease-in-out ${Math.random() * 7}s infinite;
+          pointer-events:none;
+          filter:blur(${Math.random() > .6 ? '1px' : '0'});
+          box-shadow:0 0 ${s * 2}px ${col}.4);
+        `;
+        c.appendChild(e);
+      }
+
+      // confetti falls
+      for (let i = 0; i < 22; i++) {
+        const e = document.createElement('div');
+        const s = Math.random() * 3 + 1;
+        const col = colors[Math.floor(Math.random() * colors.length)];
+        const r = Math.floor(Math.random() * 360) + 'deg';
+        e.style.cssText = `
+          position:absolute;
+          width:${s}px; height:${s * (Math.random() > .5 ? 1 : 2)}px;
+          border-radius:${Math.random() > .5 ? '50%' : '1px'};
+          background:${col}${Math.random() * .4 + .1});
+          left:${Math.random() * 100}%;
+          top:${Math.random() * 10}%;
+          --r:${r};
+          animation:confetti-fall ${Math.random() * 6 + 5}s linear ${Math.random() * 9}s infinite;
+          pointer-events:none;
+        `;
+        c.appendChild(e);
+      }
+    })();
+
+    // ── Scroll reveal ──────────────────────────────
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationDelay = (i * 0.06) + 's';
+          entry.target.classList.add('in');
+          entry.target.querySelectorAll('.ne-bar').forEach(b => b.classList.add('run'));
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ── Carousel ───────────────────────────────────
+    let carIdx = 0;
+    const carTotal = 5;
+    const carTrack = document.getElementById('car-track');
+    const dotsEl   = document.getElementById('dots');
+
+    for (let i = 0; i < carTotal; i++) {
+      const d = document.createElement('button');
+      d.style.cssText = `height:6px;border-radius:9999px;border:none;cursor:pointer;transition:all .25s;padding:0;background:${i===0?'#fbbf24':'#2d1f05'};width:${i===0?'16px':'6px'};`;
+      d.onclick = () => carGo(i);
+      dotsEl.appendChild(d);
+    }
+
+    function carGo(n) {
+      carIdx = ((n % carTotal) + carTotal) % carTotal;
+      carTrack.style.transform = `translateX(-${carIdx * 100}%)`;
+      Array.from(dotsEl.children).forEach((d, i) => {
+        d.style.background = i === carIdx ? '#fbbf24' : '#2d1f05';
+        d.style.width = i === carIdx ? '16px' : '6px';
+      });
+    }
+
+    let carTimer = setInterval(() => carGo(carIdx + 1), 4200);
+    document.getElementById('car-wrap').addEventListener('mouseenter', () => clearInterval(carTimer));
+    document.getElementById('car-wrap').addEventListener('mouseleave', () => { carTimer = setInterval(() => carGo(carIdx + 1), 4200); });
+
+    let tx = 0;
+    document.getElementById('car-wrap').addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+    document.getElementById('car-wrap').addEventListener('touchend', e => {
+      const d = tx - e.changedTouches[0].clientX;
+      if (Math.abs(d) > 38) carGo(carIdx + (d > 0 ? 1 : -1));
+    }, {passive:true});
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowLeft')  carGo(carIdx - 1);
+      if (e.key === 'ArrowRight') carGo(carIdx + 1);
+    });
+
+    // ── Music player ───────────────────────────────
+    let playing = false;
+    const vinyl = document.getElementById('vinyl');
+    const picon = document.getElementById('picon');
+    const pbar  = document.getElementById('pbar');
+
+    function togglePlay() {
+      playing = !playing;
+      if (playing) {
+        vinyl.classList.add('vinyl-spin');
+        pbar.classList.add('playing');
+        picon.innerHTML = `<path d="M5.5 3.5A1.5 1.5 0 017 5v10a1.5 1.5 0 01-3 0V5a1.5 1.5 0 011.5-1.5zM12.5 3.5A1.5 1.5 0 0114 5v10a1.5 1.5 0 01-3 0V5a1.5 1.5 0 011.5-1.5z"/>`;
+      } else {
+        vinyl.classList.remove('vinyl-spin');
+        pbar.classList.remove('playing');
+        picon.innerHTML = `<path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"/>`;
+      }
+    }
+
+    // ── Forms ──────────────────────────────────────
+    function doSubscribe(e) {
+      e.preventDefault();
+      document.getElementById('sub-ok').style.display = 'block';
+      e.target.reset();
+    }
+    function doContact(e) {
+      e.preventDefault();
+      document.getElementById('con-ok').style.display = 'block';
+      e.target.reset();
+    }
+  </script>
+
+</body>
+</html>
